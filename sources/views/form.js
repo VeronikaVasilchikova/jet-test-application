@@ -3,7 +3,7 @@ import {activitytypes} from "../models/activitytypes";
 import {contacts} from "../models/contacts";
 import {activities} from "../models/activities";
 
-export default class FormViewAdd extends JetView {
+export default class FormView extends JetView {
 	config() {
 		return {
 			view: "form",
@@ -66,6 +66,25 @@ export default class FormViewAdd extends JetView {
 								activities.waitSave(() => {
 									activities.add(values, 0);
 								});
+								this.getRoot().hide();
+							}
+							else {
+								webix.message({type: "error", text: "Validation is failed! You should fix wrong data"});
+							}
+						}
+					},
+					{
+						view: "button",
+						label: "Save",
+						type: "form",
+						width: 100,
+						click: () => {
+							const values = this.getRoot().getValues();
+							const serverDate = webix.Date.dateToStr("%Y-%m-%d");
+							const serverTime = webix.Date.dateToStr("%h:%i");
+							if (values.id && this.form.validate()) {
+								values.DueDate = `${serverDate(values.date)} ${serverTime(values.time)}`;
+								activities.updateItem(values.id, values);
 								this.getRoot().hide();
 							}
 							else {

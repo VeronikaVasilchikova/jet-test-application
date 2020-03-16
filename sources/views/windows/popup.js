@@ -1,24 +1,18 @@
 import {JetView} from "webix-jet";
+import FormView from "./form";
 
 export default class PopupView extends JetView {
-	constructor(app, name, head, body) {
-		super(app, name);
-		this._head = head;
-		this._body = body;
-	}
-
 	config() {
 		return {
 			view: "window",
 			position: "center",
 			width: 450,
 			move: true,
-			head: this._head,
-			body: this._body
+			body: FormView
 		};
 	}
 
-	showWindow(obj = "", id = "") {
+	showWindow(obj = "", id = "", head) {
 		this.getRoot().show();
 		if (obj && id) {
 			this.getRoot().getBody().setValues({
@@ -27,7 +21,7 @@ export default class PopupView extends JetView {
 				TypeID: obj.getItem(id).TypeID,
 				ContactID: obj.getItem(id).ContactID,
 				date: obj.getItem(id).DueDate,
-				time: obj.getItem(id).DueDate.split(" ")[1]
+				//time: obj.getItem(id).DueDate.split(" ")[1]
 			});
 		}
 		else {
