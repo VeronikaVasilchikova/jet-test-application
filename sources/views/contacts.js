@@ -1,5 +1,6 @@
 import {JetView} from "webix-jet";
 import {contacts} from "../models/contacts";
+import FormForContactView from "./formForContact";
 
 export default class ContactsView extends JetView {
 	config() {
@@ -14,16 +15,37 @@ export default class ContactsView extends JetView {
 				{
 					cols: [
 						{
-							width: 300,
-							view: "list",
-							localId: "listOfContacts",
-							template: `
-								<span class='webix_icon wxi-user'></span>
-								<strong>#FirstName# #LastName#</strong>
-								#Email#
-							`,
-							scroll: "y",
-							select: true
+							rows: [
+								{
+									width: 300,
+									view: "list",
+									localId: "listOfContacts",
+									scroll: "y",
+									select: true,
+									type: {
+										template: (obj) => `
+											<div class="contact">
+												<image class="contactphoto" src="data/photo/contact_photo.jpg" />
+												<div>
+													<span class="contactname">${obj.FirstName} ${obj.LastName}</span>
+													<span class="email">${obj.Email}</span>
+												</div>
+											</div>`,
+										height: 66
+									}
+								},
+								{
+									view: "button",
+									type: "icon",
+									icon: "wxi-plus-square",
+									label: "Add contact",
+									click: () => {
+										if (!this.app.getService("state").getState()) {
+											this._FormForContactView.showFormAdd();
+										}
+									}
+								}
+							]
 						},
 						{$subview: true}
 					]
@@ -44,5 +66,6 @@ export default class ContactsView extends JetView {
 		this.on(this.listOfContacts, "onAfterSelect", (id) => {
 			this.show(`./details?id=${id}`);
 		});
+		this._FormForContactView = this.ui(FormForContactView);
 	}
 }

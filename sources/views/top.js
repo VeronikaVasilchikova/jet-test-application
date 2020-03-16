@@ -13,11 +13,16 @@ export default class TopView extends JetView {
 			width: 180,
 			layout: "y",
 			select: true,
-			template: "<span class='webix_icon #icon#'></span> #value# ",
+			template: `
+				<div class="top">
+					<i class="#icon#"></i>
+					<span>#value#</span>
+				</div>
+			`,
 			data: [
-				{value: "Contacts", id: "contacts", icon: "wxi-user"},
-				{value: "Activities", id: "activities", icon: "wxi-calendar"},
-				{value: "Settings", id: "settings", icon: "wxi-sync"}
+				{value: "Contacts", id: "contacts", icon: "fas fa-users"},
+				{value: "Activities", id: "activities", icon: "fas fa-calendar-alt"},
+				{value: "Settings", id: "settings", icon: "fas fa-cogs"}
 			]
 		};
 
