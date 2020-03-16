@@ -23,7 +23,7 @@ export default class ContactsView extends JetView {
 									scroll: "y",
 									select: true,
 									type: {
-										template: (obj) => `
+										template: obj => `
 											<div class="contact">
 												<image class="contactphoto" src="data/photo/contact_photo.jpg" />
 												<div>
