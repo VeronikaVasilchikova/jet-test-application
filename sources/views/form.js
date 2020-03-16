@@ -10,6 +10,18 @@ export default class FormView extends JetView {
 			localId: "form",
 			elements: [
 				{
+					view: "label",
+					label: "Add new contact",
+					localId: "labelAdd",
+					//hidden: true
+				},
+				{
+					view: "label",
+					label: "Edit contact",
+					localId: "labelEdit",
+					//hidden: true
+				},
+				{
 					label: "Details",
 					view: "textarea",
 					name: "Details"
@@ -55,6 +67,8 @@ export default class FormView extends JetView {
 					{
 						view: "button",
 						label: "Add",
+						localId: "btnAdd",
+						//hidden: true,
 						type: "form",
 						width: 100,
 						click: () => {
@@ -76,6 +90,8 @@ export default class FormView extends JetView {
 					{
 						view: "button",
 						label: "Save",
+						localId: "btnSave",
+						//hidden: true,
 						type: "form",
 						width: 100,
 						click: () => {
@@ -117,4 +133,21 @@ export default class FormView extends JetView {
 			webix.message({type: "error", text: "Please, check whether you filled Type and Contact field"});
 		});
 	}
+
+	// edit() {
+	// 	console.log("edit");
+	// 	// this.$$("labelEdit").show();
+	// 	// this.$$("btnSave").show();
+	// 	this.$$("labelAdd").hide();
+	// 	this.$$("btnAdd").hide();
+	// }
+
+	// add() {
+	// 	console.log("add");
+	// 	this.$$("labelEdit").show();
+	// 	this.$$("btnSave").show();
+	// 	this.$$("labelAdd").hide();
+	// 	this.$$("btnAdd").hide();
+
+	// }
 }

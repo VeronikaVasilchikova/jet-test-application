@@ -10,49 +10,53 @@ export default class DetailsView extends JetView {
 				{
 					localId: "contactsTemplate",
 					template: `
-						<strong>#FirstName# #LastName#</strong>
-						<div class='details'>
-							<div class='details_first'>
-								<div class='user'></div>
-								<span>Status </span>#newStatusID#<br>
-							</div>
-							<div class='details_first'>
-								<i class="fas fa-envelope"></i>#Email#<br><br>
-								<i class="fab fa-skype"></i>#Skype#<br><br>
-								<i class="fas fa-pencil-ruler"></i>#Job#<br><br>
-								<i class="fas fa-briefcase"></i>#Company#
-							</div>
-							<div class='details_first'>
-								<span class='webix_icon wxi-calendar'></span>#Birthday#<br><br>
-								<i class="fas fa-map-marker-alt"></i>#Address#
-							</div>
+					<h2>#FirstName# #LastName#</h2>
+					<div class='details'>
+						<div>
+							<image class="contactphoto" src="data/photo/contact_photo.jpg" />
+							<div class="status">Status #newStatusID#</div>
 						</div>
-					`
+						<div>
+							<i class="fas fa-envelope"></i>#Email#<br><br>
+							<i class="fab fa-skype"></i>#Skype#<br><br>
+							<i class="fas fa-pencil-ruler"></i>#Job#<br><br>
+							<i class="fas fa-briefcase"></i>#Company#
+						</div>
+						<div>
+							<span class='webix_icon wxi-calendar'></span>#Birthday#<br><br>
+							<i class="fas fa-map-marker-alt"></i>#Address#
+						</div>
+						<div>
+							<button class="delete #id#"><i class="far fa-trash-alt"></i>Delete</button>
+							<button class="edit #id#"><i class="fas fa-edit"></i>Edit</button>
+						</div>
+					</div>
+				`,
 				},
-				{
-					view: "form",
-					rows: [
-						{
-							cols: [
-								{
-									view: "button",
-									type: "icon",
-									icon: "wxi-trash",
-									label: "Delete",
-									width: 150
-								},
-								{
-									view: "button",
-									type: "icon",
-									icon: "wxi-pencil",
-									label: "Edit",
-									width: 150
-								}
-							]
-						},
-						{}
-					]
-				}
+				// {
+				// 	view: "form",
+				// 	rows: [
+				// 		{
+				// 			cols: [
+				// 				{
+				// 					view: "button",
+				// 					type: "icon",
+				// 					icon: "wxi-trash",
+				// 					label: "Delete",
+				// 					width: 150
+				// 				},
+				// 				{
+				// 					view: "button",
+				// 					type: "icon",
+				// 					icon: "wxi-pencil",
+				// 					label: "Edit",
+				// 					width: 150
+				// 				}
+				// 			]
+				// 		},
+				// 		{}
+				// 	]
+				// }
 			]
 		};
 	}

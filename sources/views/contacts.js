@@ -39,7 +39,6 @@ export default class ContactsView extends JetView {
 			let id = contacts.getFirstId();
 			this.listOfContacts.select(id);
 			this.show(`./details?id=${id}`);
-			this.listOfContacts.select(id);
 		});
 		this.on(this.listOfContacts, "onAfterSelect", (id) => {
 			this.show(`./details?id=${id}`);
