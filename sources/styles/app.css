@@ -1,0 +1,97 @@
+.myicon{
+    content: url("https://docs.webix.com/samples/65_spreadsheet/08_ui/images/edit.svg");
+    font-size: 17px;
+    display: inline-block;
+    width: 20px;
+    margin-top: 6px;
+}
+
+/* styles for top */
+
+.top {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.top i {
+    width: 20px;
+}
+
+.top i, .top span {
+    display: block;
+    margin-right: 5px;
+}
+
+/* styles for contacts */
+
+.contact {
+    display: flex;
+    justify-content: flex-start;
+    padding: 4px 4px 4px 10px;
+}
+
+.contactphoto {
+    display: block;
+    border-radius: 5px;
+    width: 48px;
+    height: 48px;
+    margin-right: 10px;
+}
+
+.contactname {
+    font-size: 16px;
+    color:#313131;
+    font-weight: 500;
+    line-height: 20px;
+    display: block;
+}
+
+.email {
+    font-size: 14px;
+    display: block;
+    font-style: italic;
+}
+
+/* styles for details */
+
+.details {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+.details > div {
+    width: 30%;
+    margin-right: 10px;
+}
+
+.details .contactphoto {
+    display: block;
+    border-radius: 5px;
+    width: 150px;
+    height: 150px;
+}
+
+.details .status {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.details .fas,
+.details .fab {
+    margin-right: 10px;
+}
+
+.details_buttons {
+	background-color: white;
+	border-top: 0.5px solid lightgray;
+}
+
+/*styles for popup*/
+
+.head_popup {
+    text-align: center;
+}

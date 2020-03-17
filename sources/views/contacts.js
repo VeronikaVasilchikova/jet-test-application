@@ -1,0 +1,55 @@
+import {JetView} from "webix-jet";
+import {contacts} from "../models/contacts";
+
+export default class ContactsView extends JetView {
+	config() {
+		return {
+			rows: [
+				{
+					template: "Contacts",
+					type: "header",
+					css: "webix_dark",
+					height: 40
+				},
+				{
+					cols: [
+						{
+							width: 300,
+							view: "list",
+							localId: "listOfContacts",
+							scroll: "y",
+							select: true,
+							type: {
+								template: obj => `
+									<div class="contact">
+										<image class="contactphoto" src="data/photo/contact_photo.jpg" />
+										<div>
+											<span class="contactname">${obj.FirstName} ${obj.LastName}</span>
+											<span class="email">${obj.Email}</span>
+										</div>
+									</div>`,
+								height: 66
+							}
+						},
+						{$subview: true}
+					]
+				}
+			]
+		};
+	}
+
+	init() {
+		this.list = this.$$("listOfContacts");
+		this.list.sync(contacts);
+		this.list.attachEvent("onItemClick", (id) => {
+			this.setParam("id", id, true);
+		});
+
+		contacts.waitData.then(() => {
+			const id = this.getParam("id") ? this.getParam("id") : this.list.getFirstId();
+			this.list.select(id);
+			this.setParam("id", id, true);
+			this.show("./details");
+		});
+	}
+}
