@@ -46,6 +46,22 @@ export default class ContactsView extends JetView {
 									}
 								}
 							]
+							width: 300,
+							view: "list",
+							localId: "listOfContacts",
+							scroll: "y",
+							select: true,
+							type: {
+								template: obj => `
+									<div class="contact">
+										<image class="contactphoto" src="data/photo/contact_photo.jpg" />
+										<div>
+											<span class="contactname">${obj.FirstName} ${obj.LastName}</span>
+											<span class="email">${obj.Email}</span>
+										</div>
+									</div>`,
+								height: 66
+							}
 						},
 						{$subview: true}
 					]
@@ -55,16 +71,17 @@ export default class ContactsView extends JetView {
 	}
 
 	init() {
-		this.listOfContacts = this.$$("listOfContacts");
-		this.listOfContacts.sync(contacts);
-		contacts.waitData.then(() => {
-			let id = contacts.getFirstId();
-			this.listOfContacts.select(id);
-			this.show(`./details?id=${id}`);
-			this.listOfContacts.select(id);
+		this.list = this.$$("listOfContacts");
+		this.list.sync(contacts);
+		this.list.attachEvent("onItemClick", (id) => {
+			this.setParam("id", id, true);
 		});
-		this.on(this.listOfContacts, "onAfterSelect", (id) => {
-			this.show(`./details?id=${id}`);
+
+		contacts.waitData.then(() => {
+			const id = this.getParam("id") ? this.getParam("id") : this.list.getFirstId();
+			this.list.select(id);
+			this.setParam("id", id, true);
+			this.show("./details");
 		});
 		this._FormForContactView = this.ui(FormForContactView);
 	}
