@@ -38,16 +38,31 @@ export default class ContactsView extends JetView {
 		};
 	}
 
+	// init() {
+	// 	this.listOfContacts = this.$$("listOfContacts");
+	// 	this.listOfContacts.sync(contacts);
+	// 	contacts.waitData.then(() => {
+	// 		let id = contacts.getFirstId();
+	// 		this.listOfContacts.select(id);
+	// 		this.show(`./details?id=${id}`);
+	// 	});
+	// 	this.on(this.listOfContacts, "onAfterSelect", (id) => {
+	// 		this.show(`./details?id=${id}`);
+	// 	});
+	// }
+
 	init() {
-		this.listOfContacts = this.$$("listOfContacts");
-		this.listOfContacts.sync(contacts);
-		contacts.waitData.then(() => {
-			let id = contacts.getFirstId();
-			this.listOfContacts.select(id);
-			this.show(`./details?id=${id}`);
+		this.list = this.$$("listOfContacts");
+		this.list.sync(contacts);
+		this.list.attachEvent("onItemClick", (id) => {
+			this.setParam("id", id, true);
 		});
-		this.on(this.listOfContacts, "onAfterSelect", (id) => {
-			this.show(`./details?id=${id}`);
+
+		contacts.waitData.then(() => {
+			const id = this.getParam("id") ? this.getParam("id") : this.list.getFirstId();
+			this.list.select(id);
+			this.setParam("id", id, true);
+			this.show("./details");
 		});
 	}
 }

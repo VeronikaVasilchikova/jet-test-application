@@ -37,19 +37,35 @@ export default class DetailsView extends JetView {
 		};
 	}
 
-	urlChange(view, url) {
+	// urlChange(view, url) {
+	// 	webix.promise.all([
+	// 		contacts.waitData,
+	// 		statuses.waitData
+	// 	])
+	// 		.then(() => {
+	// 			let id = url[0].params.id;
+	// 			if (id) {
+	// 				let item = webix.copy(contacts.getItem(id));
+	// 				item.newStatusID = statuses.getItem(item.StatusID).Value;
+
+	// 				this.$$("contactsTemplate").parse(item);
+	// 			}
+	// 		});
+	// }
+
+	urlChange() {
 		webix.promise.all([
 			contacts.waitData,
 			statuses.waitData
-		])
-			.then(() => {
-				let id = url[0].params.id;
-				if (id) {
-					let item = webix.copy(contacts.getItem(id));
-					item.newStatusID = statuses.getItem(item.StatusID).Value;
-
-					this.$$("contactsTemplate").parse(item);
+		]).then(() => {
+			const id = this.getParam("id", true);
+			if (id && contacts.exists(id)) {
+				const contact = contacts.getItem(id);
+				if (contact.StatusID) {
+					contact.newStatusID = statuses.getItem(contact.StatusID).Value || "";
 				}
-			});
+				this.$$("contactsTemplate").parse(contact);
+			}
+		});
 	}
 }
