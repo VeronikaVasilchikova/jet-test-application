@@ -30,7 +30,7 @@ export default class ActivitiesView extends JetView {
 											inputWidth: 200,
 											align: "right",
 											click: () => {
-												this._jetPopup.showWindowAdd();
+												this._jetPopup.showWindow();
 											}
 										}
 									]
@@ -110,7 +110,7 @@ export default class ActivitiesView extends JetView {
 											return false;
 										},
 										myicon: (e, id) => {
-											this._jetPopup.showWindowEdit(activities, id.row);
+											this._jetPopup.showWindow(activities, id.row);
 										}
 									}
 								}

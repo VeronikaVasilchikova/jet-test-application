@@ -17,13 +17,19 @@ export default class ContactsView extends JetView {
 							width: 300,
 							view: "list",
 							localId: "listOfContacts",
-							template: `
-								<span class='webix_icon wxi-user'></span>
-								<strong>#FirstName# #LastName#</strong>
-								#Email#
-							`,
 							scroll: "y",
-							select: true
+							select: true,
+							type: {
+								template: obj => `
+									<div class="contact">
+										<image class="contactphoto" src="data/photo/contact_photo.jpg" />
+										<div>
+											<span class="contactname">${obj.FirstName} ${obj.LastName}</span>
+											<span class="email">${obj.Email}</span>
+										</div>
+									</div>`,
+								height: 66
+							}
 						},
 						{$subview: true}
 					]

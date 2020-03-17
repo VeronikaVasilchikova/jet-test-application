@@ -9,49 +9,33 @@ export default class PopupView extends JetView {
 			position: "center",
 			width: 450,
 			move: true,
-			// head: {
-			// 	rows: [
-			// 		{
-			// 			template: "<h3 class='head_popup'>Edit activity</h3>",
-			// 			localId: "headEdit",
-			// 			hidden: true
-			// 		},
-			// 		{
-			// 			template: "<h3 class='head_popup'>Add activity</h3>",
-			// 			localId: "headAdd",
-			// 			hidden: true
-			// 		}
-			// 	]
-			// },
+			head: "Add new activity",
 			body: FormView
 		};
 	}
 
-	// init() {
-	// 	this._FormView = this.ui(FormView);
-	// }
-
-	showWindowEdit(obj = "", id = "") {
+	showWindow(obj = "", id = "") {
 		this.getRoot().show();
-		//this.$$("headAdd").hide();
-		//this.$$("headEdit").show();
-		// console.log(this._FormView);
-		//this._FormView.edit();
-		this.getRoot().getBody().setValues({
-			id,
-			Details: obj.getItem(id).Details,
-			TypeID: obj.getItem(id).TypeID,
-			ContactID: obj.getItem(id).ContactID,
-			date: obj.getItem(id).DueDate,
-			//time: obj.getItem(id).DueDate.split(" ")[1]
-		});
+		if (obj && id) {
+			this.getRoot().getHead().setHTML("Edit activity");
+			this._FormView.edit();
+			this.getRoot().getBody().setValues({
+				id,
+				Details: obj.getItem(id).Details,
+				TypeID: obj.getItem(id).TypeID,
+				ContactID: obj.getItem(id).ContactID,
+				DueDate: obj.getItem(id).DueDate,
+				DueTime: obj.getItem(id).DueTime
+			});
+		}
+		else {
+			this.getRoot().getBody().clear();
+			this.getRoot().getHead().setHTML("Add new activity");
+			this._FormView.add();
+		}
 	}
 
-	showWindowAdd() {
-		this.getRoot().show();
-		//this._FormView.add();
-		//this.$$("headEdit").hide();
-		//this.$$("headAdd").show();
-		this.getRoot().getBody().clear();
+	init() {
+		this._FormView = this.ui(FormView);
 	}
 }

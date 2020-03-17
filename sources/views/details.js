@@ -27,36 +27,12 @@ export default class DetailsView extends JetView {
 							<i class="fas fa-map-marker-alt"></i>#Address#
 						</div>
 						<div>
-							<button class="delete #id#"><i class="far fa-trash-alt"></i>Delete</button>
-							<button class="edit #id#"><i class="fas fa-edit"></i>Edit</button>
+							<button class="delete"><i class="far fa-trash-alt"></i>Delete</button>
+							<button class="edit"><i class="fas fa-edit"></i>Edit</button>
 						</div>
 					</div>
-				`,
-				},
-				// {
-				// 	view: "form",
-				// 	rows: [
-				// 		{
-				// 			cols: [
-				// 				{
-				// 					view: "button",
-				// 					type: "icon",
-				// 					icon: "wxi-trash",
-				// 					label: "Delete",
-				// 					width: 150
-				// 				},
-				// 				{
-				// 					view: "button",
-				// 					type: "icon",
-				// 					icon: "wxi-pencil",
-				// 					label: "Edit",
-				// 					width: 150
-				// 				}
-				// 			]
-				// 		},
-				// 		{}
-				// 	]
-				// }
+				`
+				}
 			]
 		};
 	}

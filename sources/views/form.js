@@ -10,18 +10,6 @@ export default class FormView extends JetView {
 			localId: "form",
 			elements: [
 				{
-					view: "label",
-					label: "Add new contact",
-					localId: "labelAdd",
-					//hidden: true
-				},
-				{
-					view: "label",
-					label: "Edit contact",
-					localId: "labelEdit",
-					//hidden: true
-				},
-				{
 					label: "Details",
 					view: "textarea",
 					name: "Details"
@@ -54,8 +42,8 @@ export default class FormView extends JetView {
 				},
 				{
 					cols: [
-						{label: "Date", view: "datepicker", name: "date", format: webix.i18n.longDateFormatStr},
-						{label: "Time", view: "datepicker", type: "time", name: "time", format: webix.i18n.timeFormatStr}
+						{label: "Date", view: "datepicker", name: "DueDate", type: "date", format: webix.i18n.longDateFormatStr},
+						{label: "Time", view: "datepicker", name: "DueTime", type: "time", format: webix.i18n.timeFormatStr}
 					]
 				},
 				{
@@ -66,16 +54,12 @@ export default class FormView extends JetView {
 					{},
 					{
 						view: "button",
-						label: "Add",
-						localId: "btnAdd",
-						//hidden: true,
+						value: "Add",
+						localId: "addBtn",
 						type: "form",
 						width: 100,
 						click: () => {
 							const values = this.getRoot().getValues();
-							const serverDate = webix.Date.dateToStr("%Y-%m-%d");
-							const serverTime = webix.Date.dateToStr("%h:%i");
-							values.DueDate = `${serverDate(values.date)} ${serverTime(values.time)}`;
 							if (this.form.validate()) {
 								activities.waitSave(() => {
 									activities.add(values, 0);
@@ -89,17 +73,13 @@ export default class FormView extends JetView {
 					},
 					{
 						view: "button",
-						label: "Save",
-						localId: "btnSave",
-						//hidden: true,
+						value: "Save",
+						localId: "saveBtn",
 						type: "form",
 						width: 100,
 						click: () => {
 							const values = this.getRoot().getValues();
-							const serverDate = webix.Date.dateToStr("%Y-%m-%d");
-							const serverTime = webix.Date.dateToStr("%h:%i");
 							if (values.id && this.form.validate()) {
-								values.DueDate = `${serverDate(values.date)} ${serverTime(values.time)}`;
 								activities.updateItem(values.id, values);
 								this.getRoot().hide();
 							}
@@ -110,7 +90,7 @@ export default class FormView extends JetView {
 					},
 					{
 						view: "button",
-						label: "Cancel",
+						value: "Cancel",
 						type: "form",
 						width: 100,
 						click: () => {
@@ -129,25 +109,18 @@ export default class FormView extends JetView {
 
 	init() {
 		this.form = this.$$("form");
+		this.addBtn = this.$$("addBtn");
+		this.saveBtn = this.$$("saveBtn");
 		this.on(this.form, "onValidationError", () => {
 			webix.message({type: "error", text: "Please, check whether you filled Type and Contact field"});
 		});
 	}
 
-	// edit() {
-	// 	console.log("edit");
-	// 	// this.$$("labelEdit").show();
-	// 	// this.$$("btnSave").show();
-	// 	this.$$("labelAdd").hide();
-	// 	this.$$("btnAdd").hide();
-	// }
+	edit() {
+		this.addBtn.hide();
+	}
 
-	// add() {
-	// 	console.log("add");
-	// 	this.$$("labelEdit").show();
-	// 	this.$$("btnSave").show();
-	// 	this.$$("labelAdd").hide();
-	// 	this.$$("btnAdd").hide();
-
-	// }
+	add() {
+		this.saveBtn.hide();
+	}
 }
