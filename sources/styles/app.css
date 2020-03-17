@@ -23,12 +23,48 @@
     margin-right: 5px;
 }
 
+/* styles for contacts */
+
+.contact {
+    display: flex;
+    justify-content: flex-start;
+    padding: 4px 4px 4px 10px;
+}
+
+.contactphoto {
+    display: block;
+    border-radius: 5px;
+    width: 48px;
+    height: 48px;
+    margin-right: 10px;
+}
+
+.contactname {
+    font-size: 16px;
+    color:#313131;
+    font-weight: 500;
+    line-height: 20px;
+    display: block;
+}
+
+.email {
+    font-size: 14px;
+    display: block;
+    font-style: italic;
+}
+
 /* styles for details */
 
 .details {
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
+    align-items: flex-start;
     margin-top: 10px;
+}
+
+.details > div {
+    width: 30%;
+    margin-right: 10px;
 }
 
 .details .contactphoto {
@@ -42,12 +78,6 @@
     margin-top: 10px;
     font-size: 16px;
     font-weight: 500;
-    text-align: center;
-}
-
-.details > div {
-    width: 30%;
-    margin-right: 10px;
 }
 
 .details .fas,
@@ -55,60 +85,13 @@
     margin-right: 10px;
 }
 
-.details button {
-    font-size: 16px;
-    width: 100px;
-    height: 35px;
-    border-radius: 5px;
-    cursor: pointer;
+.details_buttons {
+	background-color: white;
+	border-top: 0.5px solid lightgray;
 }
 
-.details button i {
-    margin-right: 10px;
-}
+/*styles for popup*/
 
-/* styles for contacts */
-
-.contact {
-    display: flex;
-    justify-content: flex-start;
-	padding: 4px 4px 4px 10px;
-}
-
-.contactphoto {
-	display: block;
-	border-radius: 5px;
-	width: 48px;
-    height: 48px;
-    margin-right: 10px;
-}
-
-.contactname {
-	font-size: 16px;
-	color:#313131;
-	font-weight: 500;
-	line-height: 20px;
-	display: block;
-}
-
-.email {
-    font-size: 14px;
-    display: block;
-    font-style: italic;
-}
-
-/* styles for formForContact */
-
-.form.contactphoto {
-    display: block;
-	border-radius: 5px;
-	width: 150px;
-    height: 150px;
-    margin-right: 10px;
-}
-
-/* styles for datatableFile */
-
-.fas.fa-cloud-upload-alt {
-    margin-right: 10px;
+.head_popup {
+    text-align: center;
 }
