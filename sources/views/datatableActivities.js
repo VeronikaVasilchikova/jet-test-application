@@ -1,7 +1,7 @@
 import {JetView} from "webix-jet";
-import PopupView from "./windows/popup";
-import FormViewAdd from "./formAdd";
-import FormViewEdit from "./formEdit";
+//import PopupView from "./windows/popup";
+// import FormViewAdd from "./formAdd";
+// import FormViewEdit from "./formEdit";
 import {activities} from "../models/activities";
 import {activitytypes} from "../models/activitytypes";
 
@@ -77,9 +77,9 @@ export default class DatatableActivitiesView extends JetView {
 						},
 						myicon: (e, id) => {
 							if (!this.app.getService("state").getState()) {
-								activities.waitData.then(() => {
-									this._jetPopupEdit.showWindow(activities, id.row);
-								});
+								// activities.waitData.then(() => {
+								// 	this._jetPopupEdit.showWindow(activities, id.row);
+								// });
 							}
 						}
 					}
@@ -95,9 +95,9 @@ export default class DatatableActivitiesView extends JetView {
 							inputWidth: 200,
 							align: "right",
 							click: () => {
-								if (!this.app.getService("state").getState()) {
-									this._jetPopupAdd.showWindow();
-								}
+								// if (!this.app.getService("state").getState()) {
+								// 	this._jetPopupAdd.showWindow();
+								// }
 							}
 						}
 					]
@@ -107,13 +107,13 @@ export default class DatatableActivitiesView extends JetView {
 	}
 
 	init() {
-		this._jetPopupAdd = this.ui(new PopupView(this.app, "", "Add activity", FormViewAdd));
-		this._jetPopupEdit = this.ui(new PopupView(this.app, "", "Edit activity", FormViewEdit));
+		// this._jetPopupAdd = this.ui(new PopupView(this.app, "", "Add activity", FormViewAdd));
+		// this._jetPopupEdit = this.ui(new PopupView(this.app, "", "Edit activity", FormViewEdit));
 	}
 
 	urlChange(view, url) {
-		this.$$("datatableAct").clearAll();
-		this.$$("datatableAct").refresh();
+		// this.$$("datatableAct").clearAll();
+		// this.$$("datatableAct").refresh();
 		webix.promise.all([
 			activitytypes.waitData,
 			activities.waitData
