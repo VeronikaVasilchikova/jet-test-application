@@ -1,5 +1,5 @@
 import {JetView} from "webix-jet";
-import PopupView from "./windows/popup";
+import PopupFormView from "./popupForm";
 import {activities} from "../models/activities";
 import {contacts} from "../models/contacts";
 import {activitytypes} from "../models/activitytypes";
@@ -29,9 +29,7 @@ export default class ActivitiesView extends JetView {
 											label: "Add activity",
 											inputWidth: 200,
 											align: "right",
-											click: () => {
-												this._jetPopup.showWindow();
-											}
+											click: () => this.addItem()
 										}
 									]
 								},
@@ -60,7 +58,7 @@ export default class ActivitiesView extends JetView {
 										},
 										{
 											id: "DueDate",
-											header: ["Due date", {content: "datepickerFilter"}],
+											header: ["Due date", {content: "dateRangeFilter"}],
 											adjust: true,
 											sort: "date",
 											format: webix.i18n.longDateFormatStr
@@ -110,7 +108,7 @@ export default class ActivitiesView extends JetView {
 											return false;
 										},
 										myicon: (e, id) => {
-											this._jetPopup.showWindow(activities, id.row);
+											this.editItem(id.row);
 										}
 									}
 								}
@@ -125,6 +123,16 @@ export default class ActivitiesView extends JetView {
 	init() {
 		this.table = this.$$("table");
 		this.table.sync(activities);
-		this._jetPopup = this.ui(PopupView);
+		this._jetPopupForm = this.ui(PopupFormView);
+	}
+
+	editItem(id) {
+		if (id) {
+			this._jetPopupForm.showPopupForm(id);
+		}
+	}
+
+	addItem() {
+		this._jetPopupForm.showPopupForm();
 	}
 }

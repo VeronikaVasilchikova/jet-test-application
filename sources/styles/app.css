@@ -85,16 +85,9 @@
     margin-right: 10px;
 }
 
-.details button {
-    font-size: 16px;
-    width: 100px;
-    height: 35px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.details button i {
-    margin-right: 10px;
+.details_buttons {
+	background-color: white;
+	border-top: 0.5px solid lightgray;
 }
 
 /*styles for popup*/

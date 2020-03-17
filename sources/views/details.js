@@ -4,7 +4,7 @@ import {statuses} from "../models/statuses";
 
 export default class DetailsView extends JetView {
 	config() {
-		return {
+		const details = {
 			type: "clean",
 			cols: [
 				{
@@ -26,12 +26,47 @@ export default class DetailsView extends JetView {
 							<span class='webix_icon wxi-calendar'></span>#Birthday#<br><br>
 							<i class="fas fa-map-marker-alt"></i>#Address#
 						</div>
-						<div>
-							<button class="delete"><i class="far fa-trash-alt"></i>Delete</button>
-							<button class="edit"><i class="fas fa-edit"></i>Edit</button>
-						</div>
 					</div>
 				`
+				}
+			]
+		};
+
+		const buttons = {
+			padding: 25,
+			css: "details_buttons",
+			rows: [
+				{
+					cols: [
+						{
+							view: "button",
+							width: 100,
+							css: "webix_primary",
+							label: "Delete",
+							type: "icon",
+							icon: "far fa-trash-alt"
+						},
+						{
+							view: "button",
+							width: 100,
+							css: "webix_primary",
+							label: "Edit",
+							type: "icon",
+							icon: "fas fa-edit"
+						}
+					]
+				},
+				{}
+			]
+		};
+
+		return {
+			rows: [
+				{
+					cols: [
+						details,
+						buttons
+					]
 				}
 			]
 		};
@@ -44,7 +79,7 @@ export default class DetailsView extends JetView {
 		]).then(() => {
 			const id = this.getParam("id", true);
 			if (id && contacts.exists(id)) {
-				const contact = contacts.getItem(id);
+				const contact = webix.copy(contacts.getItem(id));
 				if (contact.StatusID) {
 					contact.newStatusID = statuses.getItem(contact.StatusID).Value || "";
 				}
