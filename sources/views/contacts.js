@@ -1,6 +1,5 @@
 import {JetView} from "webix-jet";
 import {contacts} from "../models/contacts";
-//import FormForContactView from "./formForContact";
 
 export default class ContactsView extends JetView {
 	config() {
@@ -39,11 +38,7 @@ export default class ContactsView extends JetView {
 									type: "icon",
 									icon: "wxi-plus-square",
 									label: "Add contact",
-									// click: () => {
-									// 	if (!this.app.getService("state").getState()) {
-									// 		this._FormForContactView.showFormAdd();
-									// 	}
-									// }
+									click: () => this.show("./formForContact?value=add")
 								}
 							]
 						},
@@ -67,6 +62,5 @@ export default class ContactsView extends JetView {
 			this.setParam("id", id, true);
 			this.show("./details");
 		});
-		//this._FormForContactView = this.ui(FormForContactView);
 	}
 }

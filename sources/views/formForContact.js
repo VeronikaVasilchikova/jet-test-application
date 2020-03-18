@@ -11,13 +11,7 @@ export default class FormForContactView extends JetView {
 				{
 					view: "label",
 					label: "Add new contact",
-					localId: "labelAdd"
-				},
-				{
-					view: "label",
-					label: "Edit contact",
-					localId: "labelEdit",
-					hidden: true
+					localId: "label"
 				},
 				{
 					margin: 50,
@@ -28,13 +22,17 @@ export default class FormForContactView extends JetView {
 									label: "First Name",
 									view: "text",
 									name: "FirstName",
-									labelWidth: 100
+									labelWidth: 100,
+									required: true,
+									invalidMessage: "Please, fill this field"
 								},
 								{
 									label: "Last Name",
 									view: "text",
 									name: "LastName",
-									labelWidth: 100
+									labelWidth: 100,
+									required: true,
+									invalidMessage: "Please, fill this field"
 								},
 								{
 									label: "Joining date",
@@ -102,6 +100,7 @@ export default class FormForContactView extends JetView {
 											label: "Phone",
 											view: "text",
 											name: "Phone",
+											placeholder: "+## ### ### ## ##",
 											pattern: {mask: "+## ### ### ## ##", allow: /[0-9]/g},
 											labelWidth: 100
 										},
@@ -111,7 +110,7 @@ export default class FormForContactView extends JetView {
 											name: "Birthday",
 											format: webix.i18n.longDateFormatStr,
 											labelWidth: 100
-										},
+										}
 									]
 								},
 								{
@@ -155,79 +154,70 @@ export default class FormForContactView extends JetView {
 							cols: [
 								{
 									view: "button",
-									label: "Cancel",
+									value: "Cancel",
 									type: "form",
 									width: 100,
-									click: () => {
-										this.getRoot().hide();
-										this.show("./details?id=1");
-									}
+									click: () => this.closeForm()
 								},
 								{
 									view: "button",
-									label: "Add",
-									localId: "btnAdd",
+									value: "Add",
+									localId: "btn",
 									type: "form",
 									width: 100,
-									click: () => {
-										const values = this.getRoot().getValues();
-										const serverDate = webix.Date.dateToStr("%Y-%m-%d");
-										values.Birthday = `${serverDate(values.Birthday)}`;
-										values.StartDate = `${serverDate(values.StartDate)}`;
-										contacts.waitSave(() => {
-											contacts.add(values);
-										});
-										this.getRoot().hide();
-										this.show(`./details?id=${values.id}`);
-										webix.message({type: "success", text: "Contact was added successfully!"});
-									}
-								},
-								{
-									view: "button",
-									label: "Save",
-									type: "form",
-									width: 100,
-									hidden: true,
-									localId: "btnSave",
-									click: () => {
-										const values = this.getRoot().getValues();
-										const serverDate = webix.Date.dateToStr("%Y-%m-%d");
-										values.Birthday = `${serverDate(values.Birthday)}`;
-										values.StartDate = `${serverDate(values.StartDate)}`;
-										contacts.updateItem(values.id, values);
-										this.getRoot().hide();
-										this.show(`./details?id=${values.id}`);
-										webix.message({type: "success", text: "Contact was updated successfully!"});
-									}
+									click: () => this.addOrEdit()
 								}
 							]
 						}
 					]
 				},
 				{}
-			]
-
+			],
+			rules: {
+				FirstName: webix.rules.isNotEmpty,
+				LastName: webix.rules.isNotEmpty,
+				Email: webix.rules.isEmail
+			}
 		};
 	}
 
-	showFormEdit(id) {
-		this.show(`./formForContact?id=${id}`);
+	init() {
+		this.form = this.$$("formForContact");
 	}
 
-	showFormAdd() {
-		this.show("./formForContact");
-
+	closeForm() {
+		this.form.clear();
+		this.form.clearValidation();
+		this.show("./details");
 	}
 
-	urlChange(view, url) {
-		contacts.waitData.then(() => {
-			const id = url[0].params.id;
-			if (id) {
-				view.setValues(contacts.getItem(id));
-				this.$$("labelEdit").show();
-				this.$$("btnSave").show();
-				this.$$("labelAdd").hide();
-				this.$$("btnAdd").hide();
+	addOrEdit() {
+		if (this.form.validate()) {
+			const values = this.form.getValues();
+			if (values && values.id) {
+				contacts.updateItem(values.id, values);
+				webix.message({type: "success", text: "Contact was updated successfully!"});
+			}
+			else {
+				contacts.add(values, 0);
+				webix.message({type: "success", text: "Contact was added successfully!"});
+			}
+			this.closeForm();
+		}
+	}
+
+	urlChange() {
+		webix.promise.all([
+			statuses.waitData,
+			contacts.waitData,
+		]).then(() => {
+			const id = this.getParam("id", true);
+			const item = contacts.getItem(id);
+			if (this.getParam("value") === "edit") {
+				this.form.setValues(item);
+				this.$$("btn").setValue("Save");
+				this.$$("btn").refresh();
+				this.$$("label").setValue("Edit contact");
 			}
 		});
 	}

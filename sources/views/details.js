@@ -41,7 +41,8 @@ export default class DetailsView extends JetView {
 							css: "webix_primary",
 							label: "Delete",
 							type: "icon",
-							icon: "far fa-trash-alt"
+							icon: "far fa-trash-alt",
+							click: () => this.deleteContact()
 						},
 						{
 							view: "button",
@@ -49,7 +50,8 @@ export default class DetailsView extends JetView {
 							css: "webix_primary",
 							label: "Edit",
 							type: "icon",
-							icon: "fas fa-edit"
+							icon: "fas fa-edit",
+							click: () => this.editContact()
 						}
 					]
 				},
@@ -68,6 +70,7 @@ export default class DetailsView extends JetView {
 		};
 
 		return {
+			type: "clean",
 			rows: [
 				{
 					cols: [
@@ -106,33 +109,29 @@ export default class DetailsView extends JetView {
 			}
 		});
 	}
-}
 
-// onClick: {
-// 	delete: (e) => {
-// 		console.log(e.target.classList.value.split(" ")[1]);
-// 		let id = e.target.classList.value.split(" ")[1];
-// 		webix.confirm({
-// 			title: "Remove this note",
-// 			ok: "Yes",
-// 			cancel: "No",
-// 			text: "Are you sure you want to remove this note?"
-// 		})
-// 			.then(() => {
-// 				webix.confirm({
-// 					title: "Warning!",
-// 					type: "confirm-warning",
-// 					text: "You are about to agree. Are you sure?"
-// 				})
-// 					.then(() => {
-// 						contacts.remove(id);
-// 					});
-// 			});
-// 		return false;
-// 	},
-// 	edit: (e) => {
-// 		let id = e.target.classList.value.split(" ")[1];
-// 		if (!this.app.getService("state").getState()) {
-// 			this._FormForContactView.showFormEdit(id);
-// 		}
-// 	}
+	deleteContact() {
+		const id = this.getParam("id", true);
+		webix.confirm({
+			title: "Remove this note",
+			ok: "Yes",
+			cancel: "No",
+			text: "Are you sure you want to remove this note?"
+		})
+			.then(() => {
+				webix.confirm({
+					title: "Warning!",
+					type: "confirm-warning",
+					text: "You are about to agree. Are you sure?"
+				})
+					.then(() => {
+						contacts.remove(id);
+					});
+			});
+	}
+
+	editContact() {
+		const values = this.$$("contactsTemplate").getValues();
+		this.show(`/top/contacts?id=${values.id}/formForContact?value=edit`);
+	}
+}

@@ -1,4 +1,6 @@
 import {JetView} from "webix-jet";
+import {fileStorage} from "../models/filestorage";
+import {contacts} from "../models/contacts";
 
 export default class DatatableFilesView extends JetView {
 	config() {
@@ -14,17 +16,23 @@ export default class DatatableFilesView extends JetView {
 						{
 							id: "name",
 							header: "Name",
-							fillspace: true
+							fillspace: true,
+							sort: "text"
 						},
 						{
 							id: "changeDate",
 							header: "Change Date",
-							fillspace: true
+							fillspace: true,
+							sort: "date",
+							format: webix.i18n.longDateFormatStr
 						},
 						{
 							id: "sizetext",
 							header: "Size",
-							fillspace: true
+							fillspace: true,
+							sort: (a, b) => {
+								return parseInt(a.sizetext) - parseInt(b.sizetext);
+							}
 						},
 						{
 							header: "",
@@ -32,70 +40,71 @@ export default class DatatableFilesView extends JetView {
 							adjust: true
 						}
 					],
-					// onClick: {
-					// 	"wxi-trash": (e, id) => {
-					// 		webix.confirm({
-					// 			title: "Remove this note",
-					// 			ok: "Yes",
-					// 			cancel: "No",
-					// 			text: "Are you sure you want to remove this note?"
-					// 		})
-					// 			.then(() => {
-					// 				webix.confirm({
-					// 					title: "Warning!",
-					// 					type: "confirm-warning",
-					// 					text: "You are about to agree. Are you sure?"
-					// 				})
-					// 					.then(() => {
-					// 						activities.remove(id);
-					// 					});
-					// 			});
-					// 		return false;
-					// 	}
-					// }
+					onClick: {
+						"wxi-trash": (e, id) => {
+							webix.confirm({
+								title: "Remove this note",
+								ok: "Yes",
+								cancel: "No",
+								text: "Are you sure you want to remove this note?"
+							})
+								.then(() => {
+									webix.confirm({
+										title: "Warning!",
+										type: "confirm-warning",
+										text: "You are about to agree. Are you sure?"
+									})
+										.then(() => {
+											fileStorage.remove(id);
+										});
+								});
+							return false;
+						}
+					}
 				},
 				{
-					view: "toolbar",
-					cols: [
-						{
-							view: "uploader",
-							link: "datatableFile",
-							id: "files",
-							name: "files",
-							//upload: "php/upload.php",
-							upload: "https://docs.webix.com/samples/server/upload",
-							// accept: "text/plain, text/html, application/vnd.ms-excel",
-							type: "icon",
-							icon: "fas fa-cloud-upload-alt",
-							label: "Upload file",
-							inputWidth: 300,
-							align: "center",
-							on: {
-								onBeforeFileAdd: (item) => {
-									// let type = item.type.toLowerCase();
-									// if (type !== "jpg" && type !== "png") {
-									// 	webix.message("Only PNG or JPG images are supported");
-									// 	return false;
-									// }
-									this.$$("datatableFile").changeDate = item.file.lastModifiedDate;
-									console.log(item.file.lastModifiedDate);
-								},
-								onFileUpload: (item) => {
-									// let id = item.context.rowid;
-									// let row = $$("people").getItem(id);
-
-									// row.photo = item.sname;
-									// $$("people").updateItem(id, row);
-									console.log(item);
-								},
-								onFileUploadError: () => {
-									webix.alert("Error during file upload");
-								}
+					view: "uploader",
+					localId: "uploader",
+					autosend: false,
+					upload: "",
+					type: "icon",
+					icon: "fas fa-cloud-upload-alt",
+					label: "Upload file",
+					inputWidth: 300,
+					align: "center",
+					on: {
+						onBeforeFileAdd: (obj) => {
+							const id = this.getParam("id", true);
+							const strToDate = webix.Date.strToDate("%Y-%m-%d");
+							if (id && contacts.exists(id)) {
+								const sendFile = {
+									ContactID: this.getParam("id", true),
+									name: obj.name,
+									changeDate: strToDate(obj.file.lastModifiedDate),
+									sizetext: obj.sizetext
+								};
+								fileStorage.add(sendFile);
 							}
+						},
+						onFileUploadError: () => {
+							webix.alert("Error during file upload");
 						}
-					]
+					}
 				}
 			]
 		};
+	}
+
+	init() {
+		this.$$("datatableFile").sync(fileStorage);
+	}
+
+	urlChange() {
+		const id = this.getParam("id", true);
+		this.$$("datatableFile").sync(fileStorage, () => {
+			this.$$("datatableFile").filter((item) => {
+				return item.ContactID === id;
+			});
+		});
 	}
 }

@@ -1,7 +1,5 @@
 import {JetView} from "webix-jet";
-//import PopupView from "./windows/popup";
-// import FormViewAdd from "./formAdd";
-// import FormViewEdit from "./formEdit";
+import PopupFormView from "./popupForm";
 import {activities} from "../models/activities";
 import {activitytypes} from "../models/activitytypes";
 
@@ -25,16 +23,16 @@ export default class DatatableActivitiesView extends JetView {
 							adjust: true
 						},
 						{
-							id: "newTypeID",
+							id: "TypeID",
 							header: [{content: "selectFilter"}],
 							sort: "text",
-							fillspace: true
+							fillspace: true,
+							options: activitytypes
 						},
 						{
 							id: "DueDate",
 							header: [{content: "datepickerFilter"}],
 							adjust: true,
-							map: "(date)#DueDate#",
 							sort: "date",
 							format: webix.i18n.longDateFormatStr
 						},
@@ -76,11 +74,7 @@ export default class DatatableActivitiesView extends JetView {
 							return false;
 						},
 						myicon: (e, id) => {
-							if (!this.app.getService("state").getState()) {
-								// activities.waitData.then(() => {
-								// 	this._jetPopupEdit.showWindow(activities, id.row);
-								// });
-							}
+							this.editItem(id.row);
 						}
 					}
 				},
@@ -94,11 +88,7 @@ export default class DatatableActivitiesView extends JetView {
 							label: "Add activity",
 							inputWidth: 200,
 							align: "right",
-							click: () => {
-								// if (!this.app.getService("state").getState()) {
-								// 	this._jetPopupAdd.showWindow();
-								// }
-							}
+							click: () => this.addItem()
 						}
 					]
 				}
@@ -107,27 +97,27 @@ export default class DatatableActivitiesView extends JetView {
 	}
 
 	init() {
-		// this._jetPopupAdd = this.ui(new PopupView(this.app, "", "Add activity", FormViewAdd));
-		// this._jetPopupEdit = this.ui(new PopupView(this.app, "", "Edit activity", FormViewEdit));
+		this._jetPopupForm = this.ui(PopupFormView);
+		this.table = this.$$("datatableAct");
 	}
 
-	urlChange(view, url) {
-		// this.$$("datatableAct").clearAll();
-		// this.$$("datatableAct").refresh();
-		webix.promise.all([
-			activitytypes.waitData,
-			activities.waitData
-		])
-			.then(() => {
-				let id = url[0].params.id;
-				let idVal = Number(id);
-				if (id) {
-					let array = webix.copy(activities.config.data.filter(item => item.ContactID === idVal));
-					array.forEach((item) => {
-						item.newTypeID = activitytypes.getItem(item.TypeID).Value;
-					});
-					this.$$("datatableAct").parse(array);
-				}
+	editItem(id) {
+		if (id) {
+			this._jetPopupForm.showPopupForm(id);
+		}
+	}
+
+	addItem() {
+		this._jetPopupForm.showPopupForm();
+	}
+
+	urlChange() {
+		const id = this.getParam("id", true);
+		this.table.sync(activities, () => {
+			const idVal = Number(id);
+			this.table.filter((item) => {
+				return item.ContactID === idVal;
 			});
+		});
 	}
 }

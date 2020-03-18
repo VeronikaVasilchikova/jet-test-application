@@ -17,8 +17,6 @@ export default class TopView extends JetView {
 				<div class="top">
 					<i class="#icon#"></i>
 					<span>#value#</span>
-					<i class="#icon#"></i>
-					<span>#value#</span>
 				</div>
 			`,
 			data: [
