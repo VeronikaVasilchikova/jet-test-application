@@ -63,4 +63,14 @@ export default class ContactsView extends JetView {
 			this.show("./details");
 		});
 	}
+
+	urlChange() {
+		const id = this.getParam("id");
+		if (id && contacts.exists(id)) {
+			this.list.select(id);
+		}
+		else {
+			this.list.select(this.list.getFirstId());
+		}
+	}
 }

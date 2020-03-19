@@ -38,6 +38,7 @@ export default class PopupFormView extends JetView {
 						label: "Contact",
 						view: "combo",
 						name: "ContactID",
+						localId: "ContactID",
 						options: {
 							body: {
 								data: contacts,
@@ -90,10 +91,14 @@ export default class PopupFormView extends JetView {
 		this.form = this.$$("form");
 	}
 
-	showPopupForm(id) {
+	showPopupForm(id, idForName = "") {
 		if (id && activities.exists(id)) {
 			const item = activities.getItem(id);
 			this.form.setValues(item);
+		}
+		if (!id && idForName) {
+			this.form.setValues({ContactID: idForName});
+			this.$$("ContactID").disable();
 		}
 		this.getRoot().show();
 		const someAction = id ? "Edit activity" : "Add activity";
@@ -113,12 +118,16 @@ export default class PopupFormView extends JetView {
 			const hours = values.DueTime.getHours();
 			const minutes = values.DueTime.getMinutes();
 			values.DueDate.setHours(hours, minutes);
-			if (values && values.id) {
-				activities.updateItem(values.id, values);
-			}
-			else {
-				activities.add(values, 0);
-			}
+			activities.waitSave(() => {
+				if (values && values.id) {
+					activities.updateItem(values.id, values);
+					this.app.callEvent("onClickSave");
+				}
+				else {
+					activities.add(values, 0);
+					this.app.callEvent("onClickSave", [values]);
+				}
+			});
 			this.closeForm();
 		}
 	}

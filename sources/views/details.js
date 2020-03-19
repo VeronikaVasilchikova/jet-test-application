@@ -1,9 +1,10 @@
 import {JetView} from "webix-jet";
 import {contacts} from "../models/contacts";
 import {statuses} from "../models/statuses";
+import {activities} from "../models/activities";
+import {fileStorage} from "../models/filestorage";
 import DatatableActivitiesView from "./datatableActivities";
 import DatatableFilesView from "./datatableFiles";
-import FormForContactView from "./formForContact";
 
 export default class DetailsView extends JetView {
 	config() {
@@ -91,7 +92,6 @@ export default class DetailsView extends JetView {
 
 	init() {
 		this.$$("tabbar").attachEvent("onChange", id => this.$$(id).show());
-		this._FormForContactView = this.ui(FormForContactView);
 	}
 
 	urlChange() {
@@ -104,6 +104,7 @@ export default class DetailsView extends JetView {
 				const contact = webix.copy(contacts.getItem(id));
 				if (contact.StatusID) {
 					contact.newStatusID = statuses.getItem(contact.StatusID).Value || "";
+					contact.Birthday = webix.i18n.longDateFormatStr(contact.Birthday);
 				}
 				this.$$("contactsTemplate").parse(contact);
 			}
@@ -112,22 +113,35 @@ export default class DetailsView extends JetView {
 
 	deleteContact() {
 		const id = this.getParam("id", true);
-		webix.confirm({
-			title: "Remove this note",
-			ok: "Yes",
-			cancel: "No",
-			text: "Are you sure you want to remove this note?"
-		})
-			.then(() => {
-				webix.confirm({
-					title: "Warning!",
-					type: "confirm-warning",
-					text: "You are about to agree. Are you sure?"
-				})
-					.then(() => {
-						contacts.remove(id);
-					});
-			});
+		if (id && contacts.exists(id)) {
+			webix.confirm({
+				title: "Remove this contact",
+				ok: "Yes",
+				cancel: "No",
+				text: "Are you sure you want to remove this contact?"
+			})
+				.then(() => {
+					webix.confirm({
+						title: "Warning!",
+						type: "confirm-warning",
+						text: "You are about to agree. Are you sure?"
+					})
+						.then(() => {
+							contacts.remove(id);
+							const idVal = Number(id);
+							const contactsActivities = activities.find(obj => obj.ContactID === idVal);
+							contactsActivities.forEach((item) => {
+								activities.remove(item.id);
+							});
+							const contactsFiles = fileStorage.find(obj => obj.ContactID === id);
+							contactsFiles.forEach((item) => {
+								fileStorage.remove(item.id);
+							});
+							const switchId = contacts.getFirstId();
+							this.show(`/top/contacts?id=${switchId}/details`);
+						});
+				});
+		}
 	}
 
 	editContact() {

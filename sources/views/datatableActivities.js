@@ -31,7 +31,7 @@ export default class DatatableActivitiesView extends JetView {
 						},
 						{
 							id: "DueDate",
-							header: [{content: "datepickerFilter"}],
+							header: [{content: "dateRangeFilter"}],
 							adjust: true,
 							sort: "date",
 							format: webix.i18n.longDateFormatStr
@@ -69,6 +69,7 @@ export default class DatatableActivitiesView extends JetView {
 									})
 										.then(() => {
 											activities.remove(id);
+											this.table.remove(id);
 										});
 								});
 							return false;
@@ -96,9 +97,30 @@ export default class DatatableActivitiesView extends JetView {
 		};
 	}
 
+	filterActivities(id) {
+		this.table = this.$$("datatableAct");
+		this.table.clearAll();
+		this.table.parse(
+			activities.find(item => item.ContactID === id)
+		);
+	}
+
 	init() {
 		this._jetPopupForm = this.ui(PopupFormView);
 		this.table = this.$$("datatableAct");
+
+		activities.waitData.then(() => {
+			const id = this.getParam("id", true);
+			const idVal = Number(id);
+			this.filterActivities(idVal);
+		});
+
+		this.on(this.app, "onClickSave", (values) => {
+			if (values) {
+				this.table.parse(values);
+			}
+			this.table.refresh();
+		});
 	}
 
 	editItem(id) {
@@ -108,16 +130,15 @@ export default class DatatableActivitiesView extends JetView {
 	}
 
 	addItem() {
-		this._jetPopupForm.showPopupForm();
+		const idForName = this.getParam("id", true);
+		this._jetPopupForm.showPopupForm("", idForName);
 	}
 
 	urlChange() {
-		const id = this.getParam("id", true);
-		this.table.sync(activities, () => {
+		activities.waitData.then(() => {
+			const id = this.getParam("id", true);
 			const idVal = Number(id);
-			this.table.filter((item) => {
-				return item.ContactID === idVal;
-			});
+			this.filterActivities(idVal);
 		});
 	}
 }

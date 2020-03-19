@@ -30,9 +30,7 @@ export default class DatatableFilesView extends JetView {
 							id: "sizetext",
 							header: "Size",
 							fillspace: true,
-							sort: (a, b) => {
-								return parseInt(a.sizetext) - parseInt(b.sizetext);
-							}
+							sort: (a, b) => parseInt(a.sizetext) - parseInt(b.sizetext)
 						},
 						{
 							header: "",
@@ -102,9 +100,7 @@ export default class DatatableFilesView extends JetView {
 	urlChange() {
 		const id = this.getParam("id", true);
 		this.$$("datatableFile").sync(fileStorage, () => {
-			this.$$("datatableFile").filter((item) => {
-				return item.ContactID === id;
-			});
+			this.$$("datatableFile").filter(item => item.ContactID === id);
 		});
 	}
 }

@@ -88,7 +88,8 @@ export default class FormForContactView extends JetView {
 											label: "Email",
 											view: "text",
 											name: "Email",
-											labelWidth: 100
+											labelWidth: 100,
+											invalidMessage: "Please, input valid email"
 										},
 										{
 											label: "Skype",
@@ -100,8 +101,6 @@ export default class FormForContactView extends JetView {
 											label: "Phone",
 											view: "text",
 											name: "Phone",
-											placeholder: "+## ### ### ## ##",
-											pattern: {mask: "+## ### ### ## ##", allow: /[0-9]/g},
 											labelWidth: 100
 										},
 										{
@@ -117,9 +116,9 @@ export default class FormForContactView extends JetView {
 									cols: [
 										{
 											type: "clean",
-											template: `
-												<image class="form contactphoto" src="data/photo/contact_photo.jpg" />
-											`
+											name: "Photo",
+											template: obj => `<image class="form contactphoto" src=${obj.Photo || "data/photo/contact_photo.jpg"} />`,
+											localId: "contactPhoto"
 										},
 										{
 											margin: 10,
@@ -129,14 +128,24 @@ export default class FormForContactView extends JetView {
 													view: "uploader",
 													label: "Change photo",
 													accept: "image/jpeg, image/png",
-													upload: "//docs.webix.com/samples/server/upload",
 													autosend: false,
-													multiple: false
+													multiple: false,
+													on: {
+														onBeforeFileAdd: (item) => {
+															const reader = new FileReader();
+															reader.readAsDataURL(item.file);
+															reader.onload = () => this.$$("contactPhoto").setValues({Photo: reader.result});
+														},
+														onFileUploadError: () => {
+															webix.alert("Error during file upload");
+														}
+													}
 												},
 												{
 													view: "button",
 													type: "form",
-													label: "Delete photo"
+													label: "Delete photo",
+													click: () => this.deletePhoto()
 												}
 											]
 										}
@@ -194,22 +203,28 @@ export default class FormForContactView extends JetView {
 	addOrEdit() {
 		if (this.form.validate()) {
 			const values = this.form.getValues();
-			if (values && values.id) {
-				contacts.updateItem(values.id, values);
-				webix.message({type: "success", text: "Contact was updated successfully!"});
-			}
-			else {
-				contacts.add(values, 0);
-				webix.message({type: "success", text: "Contact was added successfully!"});
-			}
+			contacts.waitSave(() => {
+				if (values && values.id) {
+					contacts.updateItem(values.id, values);
+					webix.message({type: "success", text: "Contact was updated successfully!"});
+				}
+				else {
+					contacts.add(values, 0);
+					webix.message({type: "success", text: "Contact was added successfully!"});
+				}
+			});
 			this.closeForm();
 		}
+	}
+
+	deletePhoto() {
+		this.$$("contactPhoto").setValues({Photo: ""});
 	}
 
 	urlChange() {
 		webix.promise.all([
 			statuses.waitData,
-			contacts.waitData,
+			contacts.waitData
 		]).then(() => {
 			const id = this.getParam("id", true);
 			const item = contacts.getItem(id);
