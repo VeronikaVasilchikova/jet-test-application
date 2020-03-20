@@ -5,6 +5,8 @@ import {activitytypes} from "../models/activitytypes";
 
 export default class DatatableActivitiesView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		return {
 			rows: [
 				{
@@ -15,11 +17,11 @@ export default class DatatableActivitiesView extends JetView {
 					autoconfig: true,
 					columns: [
 						{
-							id: "checked",
+							id: "State",
 							header: "",
 							template: "{common.checkbox()}",
-							checkValue: "on",
-							uncheckValue: "off",
+							checkValue: "Close",
+							uncheckValue: "Open",
 							adjust: true
 						},
 						{
@@ -56,16 +58,16 @@ export default class DatatableActivitiesView extends JetView {
 					onClick: {
 						"wxi-trash": (e, id) => {
 							webix.confirm({
-								title: "Remove this note",
-								ok: "Yes",
-								cancel: "No",
-								text: "Are you sure you want to remove this note?"
+								title: _("Remove this note"),
+								ok: _("Yes"),
+								cancel: _("No"),
+								text: _("Are you sure you want to remove this note?")
 							})
 								.then(() => {
 									webix.confirm({
-										title: "Warning!",
+										title: _("Warning!"),
 										type: "confirm-warning",
-										text: "You are about to agree. Are you sure?"
+										text: _("You are about to agree. Are you sure?")
 									})
 										.then(() => {
 											activities.remove(id);
@@ -86,7 +88,7 @@ export default class DatatableActivitiesView extends JetView {
 							view: "button",
 							type: "icon",
 							icon: "wxi-plus-square",
-							label: "Add activity",
+							label: _("Add activity"),
 							inputWidth: 200,
 							align: "right",
 							click: () => this.addItem()

@@ -2,9 +2,11 @@ import {JetView, plugins} from "webix-jet";
 
 export default class TopView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		const header = {
 			type: "header",
-			template: "Jet Test Application"
+			template: _("Jet Test Application")
 		};
 
 		const menu = {
@@ -20,9 +22,9 @@ export default class TopView extends JetView {
 				</div>
 			`,
 			data: [
-				{value: "Contacts", id: "contacts", icon: "fas fa-users"},
-				{value: "Activities", id: "activities", icon: "fas fa-calendar-alt"},
-				{value: "Settings", id: "settings", icon: "fas fa-cogs"}
+				{value: _("Contacts"), id: "contacts", icon: "fas fa-users"},
+				{value: _("Activities"), id: "activities", icon: "fas fa-calendar-alt"},
+				{value: _("Settings"), id: "settings", icon: "fas fa-cogs"}
 			]
 		};
 

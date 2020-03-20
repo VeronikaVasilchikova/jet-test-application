@@ -8,6 +8,8 @@ import DatatableFilesView from "./datatableFiles";
 
 export default class DetailsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		const details = {
 			localId: "contactsTemplate",
 			template: `
@@ -40,7 +42,7 @@ export default class DetailsView extends JetView {
 							view: "button",
 							width: 100,
 							css: "webix_primary",
-							label: "Delete",
+							label: _("Delete"),
 							type: "icon",
 							icon: "far fa-trash-alt",
 							click: () => this.deleteContact()
@@ -49,7 +51,7 @@ export default class DetailsView extends JetView {
 							view: "button",
 							width: 100,
 							css: "webix_primary",
-							label: "Edit",
+							label: _("Edit"),
 							type: "icon",
 							icon: "fas fa-edit",
 							click: () => this.editContact()
@@ -64,8 +66,8 @@ export default class DetailsView extends JetView {
 			value: "activities",
 			localId: "tabbar",
 			options: [
-				{value: "Activities", id: "activities"},
-				{value: "Files", id: "files"}
+				{value: _("Activities"), id: "activities"},
+				{value: _("Files"), id: "files"}
 			],
 			height: 50
 		};
@@ -112,19 +114,20 @@ export default class DetailsView extends JetView {
 	}
 
 	deleteContact() {
+		const _ = this.app.getService("locale")._;
 		const id = this.getParam("id", true);
 		if (id && contacts.exists(id)) {
 			webix.confirm({
-				title: "Remove this contact",
-				ok: "Yes",
-				cancel: "No",
-				text: "Are you sure you want to remove this contact?"
+				title: _("Remove this contact"),
+				ok: _("Yes"),
+				cancel: _("No"),
+				text: _("Are you sure you want to remove this contact?")
 			})
 				.then(() => {
 					webix.confirm({
-						title: "Warning!",
+						title: _("Warning!"),
 						type: "confirm-warning",
-						text: "You are about to agree. Are you sure?"
+						text: _("You are about to agree. Are you sure?")
 					})
 						.then(() => {
 							contacts.remove(id);

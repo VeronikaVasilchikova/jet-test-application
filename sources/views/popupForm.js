@@ -5,6 +5,8 @@ import {activities} from "../models/activities";
 
 export default class PopupFormView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		return {
 			view: "window",
 			localId: "window",
@@ -17,12 +19,12 @@ export default class PopupFormView extends JetView {
 				localId: "form",
 				elements: [
 					{
-						label: "Details",
+						label: _("Details"),
 						view: "textarea",
 						name: "Details"
 					},
 					{
-						label: "Type",
+						label: _("Type"),
 						view: "combo",
 						name: "TypeID",
 						options: {
@@ -32,10 +34,10 @@ export default class PopupFormView extends JetView {
 							}
 						},
 						required: true,
-						invalidMessage: "Type must be selected"
+						invalidMessage: _("Type must be selected")
 					},
 					{
-						label: "Contact",
+						label: _("Contact"),
 						view: "combo",
 						name: "ContactID",
 						localId: "ContactID",
@@ -46,23 +48,23 @@ export default class PopupFormView extends JetView {
 							}
 						},
 						required: true,
-						invalidMessage: "Contact must be selected"
+						invalidMessage: _("Contact must be selected")
 					},
 					{
 						cols: [
-							{label: "Date", view: "datepicker", name: "DueDate", type: "date", format: webix.i18n.longDateFormatStr},
-							{label: "Time", view: "datepicker", name: "DueTime", type: "time", format: webix.i18n.timeFormatStr}
+							{label: _("Date"), view: "datepicker", name: "DueDate", type: "date", format: webix.i18n.longDateFormatStr},
+							{label: _("Time"), view: "datepicker", name: "DueTime", type: "time", format: webix.i18n.timeFormatStr}
 						]
 					},
 					{
-						labelRight: "Completed",
+						labelRight: _("Completed"),
 						view: "checkbox"
 					},
 					{cols: [
 						{},
 						{
 							view: "button",
-							value: "Add",
+							value: _("Add"),
 							localId: "btn",
 							type: "form",
 							width: 150,
@@ -70,7 +72,7 @@ export default class PopupFormView extends JetView {
 						},
 						{
 							view: "button",
-							value: "Cancel",
+							value: _("Cancel"),
 							type: "form",
 							width: 150,
 							click: () => this.closeForm()
@@ -92,6 +94,8 @@ export default class PopupFormView extends JetView {
 	}
 
 	showPopupForm(id, idForName = "") {
+		const _ = this.app.getService("locale")._;
+
 		if (id && activities.exists(id)) {
 			const item = activities.getItem(id);
 			this.form.setValues(item);
@@ -101,7 +105,7 @@ export default class PopupFormView extends JetView {
 			this.$$("ContactID").disable();
 		}
 		this.getRoot().show();
-		const someAction = id ? "Edit activity" : "Add activity";
+		const someAction = id ? _("Edit activity") : _("Add activity");
 		this.getRoot().getHead().setHTML(someAction);
 		this.$$("btn").setValue(someAction);
 	}

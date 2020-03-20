@@ -3,10 +3,12 @@ import {contacts} from "../models/contacts";
 
 export default class ContactsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		return {
 			rows: [
 				{
-					template: "Contacts",
+					template: _("Contacts"),
 					type: "header",
 					css: "webix_dark",
 					height: 40
@@ -15,6 +17,23 @@ export default class ContactsView extends JetView {
 					cols: [
 						{
 							rows: [
+								{
+									view: "text",
+									localId: "inputFind",
+									css: "fltr",
+									placeholder: _("Type to find mathing contacts"),
+									on: {
+										onTimedKeyPress: () => {
+											let value = this.$$("inputFind").getValue().toLowerCase();
+											this.$$("listOfContacts").filter((obj) => {
+												let firstName = obj.FirstName.toLowerCase().indexOf(value);
+												let lastName = obj.LastName.toLowerCase().indexOf(value);
+												let job = obj.Job.toLowerCase().indexOf(value);
+												return firstName !== -1 || lastName !== -1 || job !== -1;
+											});
+										}
+									}
+								},
 								{
 									width: 300,
 									view: "list",
@@ -27,7 +46,7 @@ export default class ContactsView extends JetView {
 												<image class="contactphoto" src="data/photo/contact_photo.jpg" />
 												<div>
 													<span class="contactname">${obj.FirstName} ${obj.LastName}</span>
-													<span class="email">${obj.Email}</span>
+													<span class="job">${obj.Job}</span>
 												</div>
 											</div>`,
 										height: 66
@@ -37,7 +56,7 @@ export default class ContactsView extends JetView {
 									view: "button",
 									type: "icon",
 									icon: "wxi-plus-square",
-									label: "Add contact",
+									label: _("Add contact"),
 									click: () => this.show("./formForContact?value=add")
 								}
 							]
