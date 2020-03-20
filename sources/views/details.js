@@ -10,22 +10,22 @@ export default class DetailsView extends JetView {
 	config() {
 		const details = {
 			localId: "contactsTemplate",
-			template: `
-			<h2>#FirstName# #LastName#</h2>
+			template: obj => `
+			<h2>${obj.FirstName} ${obj.LastName}</h2>
 			<div class='details'>
 				<div>
-					<image class="contactphoto" src="data/photo/contact_photo.jpg" />
-					<div class="status">Status #newStatusID#</div>
+					<image class="contactphoto" src="${obj.Photo || "data/photo/contact_photo.jpg"}" />
+					<div class="status">Status ${obj.newStatusID}</div>
 				</div>
 				<div>
-					<i class="fas fa-envelope"></i>#Email#<br><br>
-					<i class="fab fa-skype"></i>#Skype#<br><br>
-					<i class="fas fa-pencil-ruler"></i>#Job#<br><br>
-					<i class="fas fa-briefcase"></i>#Company#
+					<i class="fas fa-envelope"></i>${obj.Email}<br><br>
+					<i class="fab fa-skype"></i>${obj.Skype}<br><br>
+					<i class="fas fa-pencil-ruler"></i>${obj.Job}<br><br>
+					<i class="fas fa-briefcase"></i>${obj.Company}
 				</div>
 				<div>
-					<span class='webix_icon wxi-calendar'></span>#Birthday#<br><br>
-					<i class="fas fa-map-marker-alt"></i>#Address#
+					<span class='webix_icon wxi-calendar'></span>${webix.i18n.longDateFormatStr(obj.Birthday)}<br><br>
+					<i class="fas fa-map-marker-alt"></i>${obj.Address}
 				</div>
 			</div>
 		`
@@ -104,7 +104,6 @@ export default class DetailsView extends JetView {
 				const contact = webix.copy(contacts.getItem(id));
 				if (contact.StatusID) {
 					contact.newStatusID = statuses.getItem(contact.StatusID).Value || "";
-					contact.Birthday = webix.i18n.longDateFormatStr(contact.Birthday);
 				}
 				this.$$("contactsTemplate").parse(contact);
 			}
@@ -128,12 +127,16 @@ export default class DetailsView extends JetView {
 					})
 						.then(() => {
 							contacts.remove(id);
-							const idVal = Number(id);
-							const contactsActivities = activities.find(obj => obj.ContactID === idVal);
+
+							const contactsActivities = activities
+								.find(obj => obj.ContactID.toString() === id.toString());
+
 							contactsActivities.forEach((item) => {
 								activities.remove(item.id);
 							});
-							const contactsFiles = fileStorage.find(obj => obj.ContactID === id);
+							const contactsFiles = fileStorage
+								.find(obj => obj.ContactID.toString() === id.toString());
+
 							contactsFiles.forEach((item) => {
 								fileStorage.remove(item.id);
 							});

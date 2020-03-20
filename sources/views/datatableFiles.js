@@ -8,7 +8,7 @@ export default class DatatableFilesView extends JetView {
 			rows: [
 				{
 					view: "datatable",
-					id: "datatableFile",
+					localId: "datatableFile",
 					type: "uploader",
 					scroll: "y",
 					css: "webix_data_border webix_header_border",

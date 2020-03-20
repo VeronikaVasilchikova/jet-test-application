@@ -1,4 +1,4 @@
-const strToDate = webix.Date.strToDate("%Y-%m-%d %h:%i");
+const strToDate = webix.Date.strToDate("%Y-%m-%d");
 const dateToStr = webix.Date.dateToStr("%Y-%m-%d %h:%i");
 
 export const contacts = new webix.DataCollection({

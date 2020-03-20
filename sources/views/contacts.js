@@ -24,7 +24,7 @@ export default class ContactsView extends JetView {
 									type: {
 										template: obj => `
 											<div class="contact">
-												<image class="contactphoto" src="data/photo/contact_photo.jpg" />
+												<image class="contactphoto" src="${obj.Photo || "data/photo/contact_photo.jpg"}" />
 												<div>
 													<span class="contactname">${obj.FirstName} ${obj.LastName}</span>
 													<span class="email">${obj.Email}</span>
@@ -68,9 +68,6 @@ export default class ContactsView extends JetView {
 		const id = this.getParam("id");
 		if (id && contacts.exists(id)) {
 			this.list.select(id);
-		}
-		else {
-			this.list.select(this.list.getFirstId());
 		}
 	}
 }
