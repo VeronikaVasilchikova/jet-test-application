@@ -61,17 +61,15 @@ export default class DatatableActivitiesView extends JetView {
 								ok: "Yes",
 								cancel: "No",
 								text: "Are you sure you want to remove this note?"
-							})
-								.then(() => {
-									webix.confirm({
-										title: "Warning!",
-										type: "confirm-warning",
-										text: "You are about to agree. Are you sure?"
-									})
-										.then(() => {
-											activities.remove(id);
-										});
+							}).then(() => {
+								return webix.confirm({
+									title: "Warning!",
+									type: "confirm-warning",
+									text: "You are about to agree. Are you sure?"
 								});
+							}).then(() => {
+								activities.remove(id);
+							});
 							return false;
 						},
 						myicon: (e, id) => {
