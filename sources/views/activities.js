@@ -27,6 +27,7 @@ export default class ActivitiesView extends JetView {
 											view: "tabbar",
 											localId: "tabbarFilter",
 											value: "All",
+											gravity: 2,
 											options:
 												[
 													{id: "all", value: _("All")},
@@ -49,6 +50,8 @@ export default class ActivitiesView extends JetView {
 											icon: "wxi-plus-square",
 											label: _("Add activity"),
 											inputWidth: 200,
+											gravity: 1,
+											css: "add_activity",
 											align: "right",
 											click: () => this.addItem()
 										}
@@ -146,44 +149,48 @@ export default class ActivitiesView extends JetView {
 		this.table.sync(activities);
 		this._jetPopupForm = this.ui(PopupFormView);
 
-		function getDates() {
+		function getDate() {
 			let today = new Date();
-			let dates = {};
-			dates.currentDay = webix.Date.datePart(today);
-			dates.tomorrow = webix.Date.add(dates.currentDay, 1, "day", true);
-			dates.startCurrentWeek = webix.Date.weekStart(dates.currentDay);
-			dates.startCurrentMonth = webix.Date.monthStart(dates.currentDay);
-			return dates;
+			let date = {};
+			date.currentDay = webix.Date.datePart(today);
+			date.tomorrow = webix.Date.add(date.currentDay, 1, "day", true);
+			date.beginCurrentWeek = webix.Date.weekStart(date.currentDay);
+			date.beginCurrentMonth = webix.Date.monthStart(date.currentDay);
+			return date;
 		}
-
-		const dates = getDates();
 
 		this.table.registerFilter(
 			this.$$("tabbarFilter"), {
 				columnId: "State",
 				compare: (value, filter, item) => {
-					const serverFormat = webix.Date.dateToStr("%Y-%m-%d");
-					let state = item.State;
-					let date = item.DueDate;
-					let DateDay = webix.Date.datePart(date, true);
-					let startWeek = webix.Date.weekStart(DateDay);
-					let startMonth = webix.Date.monthStart(DateDay);
-					if (filter === "all") return item;
-					else if (filter === "overdue") {
-						return state === "Open" && date < new Date();
+					const date = getDate();
+					let today = new Date();
+					let dateItem = item.DueDate;
+					let datepart = webix.Date.datePart(dateItem, true);
+					let beginWeek = webix.Date.weekStart(datepart);
+					let beginMonth = webix.Date.monthStart(datepart);
+
+					if (filter === "all") {
+						return item;
 					}
-					else if (filter === "completed") return state === "Close";
-					else if (filter === "today") {
-						console.log(dates.currentDay, DateDay, state);
-						return webix.Date.equal(dates.currentDay, DateDay) && state === "Open";
+					if (filter === "overdue") {
+						return dateItem < today && value === "Open";
 					}
-					else if (filter === "tomorrow") {
-						return webix.Date.equal(dates.tomorrow, DateDay) && state === "Open";
+					if (filter === "completed") {
+						return value === "Close";
 					}
-					else if (filter === "thisweek") {
-						return webix.Date.equal(dates.startCurrentWeek, startWeek) && state === "Open";
+					if (filter === "today") {
+						return webix.Date.equal(date.currentDay, datepart) && value === "Open";
 					}
-					return webix.Date.equal(dates.startCurrentMonth, startMonth) && state === "Open";
+					if (filter === "tomorrow") {
+						return webix.Date.equal(date.tomorrow, datepart) && value === "Open";
+					}
+					if (filter === "thisweek") {
+						return webix.Date.equal(date.beginCurrentWeek, beginWeek) && value === "Open";
+					}
+					if (filter === "thismonth") {
+						return webix.Date.equal(date.beginCurrentMonth, beginMonth) && value === "Open";
+					}
 				}
 			}, {
 				getValue: node => node.getValue(),

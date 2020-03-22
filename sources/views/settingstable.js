@@ -1,15 +1,11 @@
 import {JetView} from "webix-jet";
-import {icons} from "../models/icons";
+import PopupFormForSettingsView from "./popupFormForSettings";
 
-export default class SettingsTable extends JetView {
-	constructor(app, name, data, localId, headerName, valueIcon, label, value) {
+export default class SettingsTableView extends JetView {
+	constructor(app, name, data, label) {
 		super(app, name);
-		this._tabledata = data;
+		this._tdata = data;
 		this.label = label;
-		this.localId = localId;
-		this.headerName = headerName;
-		this.valueIcon = valueIcon;
-		this.value = value;
 	}
 
 	config() {
@@ -18,34 +14,35 @@ export default class SettingsTable extends JetView {
 		const label = {
 			view: "label",
 			label: _(this.label),
-			localId: "label",
-			css: "labelForSetTabl"
+			css: "settings_header"
 		};
 
 		const table = {
 			view: "datatable",
-			localId: this.localId,
-			editable: true,
-			scroll: "auto",
-			editaction: "dblclick",
+			localId: "datatable",
+			autoconfig: true,
+			css: "webix_data_border webix_header_border",
 			columns: [
 				{
 					id: "Value",
-					header: _(this.headerName),
-					fillspace: true,
-					editor: "text"
+					header: _(this.label),
+					fillspace: true
 				},
 				{
 					id: "Icon",
-					header: _(this.valueIcon),
-					width: 150,
-					editor: "select",
-					collection: icons
+					header: _("Icon"),
+					adjust: true,
+					template: "<span class='webix_icon wxi-#Icon#'></span> #Icon#"
 				},
 				{
-					id: "",
+					header: "",
+					template: "<span class='myicon'></span>",
+					adjust: true
+				},
+				{
+					header: "",
 					template: "{common.trashIcon()}",
-					width: 40
+					adjust: true
 				}
 			],
 			onClick: {
@@ -55,46 +52,50 @@ export default class SettingsTable extends JetView {
 						ok: _("Ok"),
 						cancel: _("Cancel")
 					}).then(() => {
-						this._tabledata.remove(id);
+						this._tdata.remove(id);
 					});
 					return false;
+				},
+				myicon: (e, id) => {
+					this.editOrAddItem(id.row);
 				}
 			}
 		};
-		const bottom = {
-			view: "toolbar",
-			css: "bottomSetTabl",
-			padding: 0,
-			elements: [
-				{},
-				{
-					view: "button",
-					label: _(this.label),
-					type: "icon",
-					icon: "wxi-plus-square",
-					css: "webix_primary",
-					width: 150,
-					align: "center",
-					click: () => {
-						this._tabledata.add({Value: _(this.value), Icon: "icon"});
-					}
-				}
-			]
+
+		const button = {
+			view: "button",
+			label: _(this.label),
+			type: "icon",
+			icon: "wxi-plus-square",
+			css: "webix_primary",
+			width: 150,
+			align: "center",
+			click: () => {
+				this.editOrAddItem();
+			}
 		};
+
 		return {
 			rows: [
 				label,
 				table,
 				{
 					cols: [
-						bottom
+						{},
+						button,
+						{}
 					]
 				}
 			]
 		};
 	}
 
-	init(view) {
-		view.queryView("datatable").sync(this._tabledata);
+	init() {
+		this.$$("datatable").sync(this._tdata);
+		this._jetPopupForm = this.ui(new PopupFormForSettingsView(this.app, "", this._tdata, this.label, this.icons));
+	}
+
+	editOrAddItem(id) {
+		this._jetPopupForm.showPopupForm(id);
 	}
 }

@@ -6,7 +6,8 @@ export default class TopView extends JetView {
 
 		const header = {
 			type: "header",
-			template: _("Jet Test Application")
+			template: _("Jet Test Application"),
+			height: 40
 		};
 
 		const menu = {

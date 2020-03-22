@@ -58,7 +58,10 @@ export default class PopupFormView extends JetView {
 					},
 					{
 						labelRight: _("Completed"),
-						view: "checkbox"
+						view: "checkbox",
+						name: "State",
+						checkValue: "Close",
+						uncheckValue: "Open"
 					},
 					{cols: [
 						{},

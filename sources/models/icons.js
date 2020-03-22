@@ -1,21 +1,34 @@
-function getIcon(icon) {
-	return `<span class="webix_icon wxi-${icon}"></span> ${icon}`;
-}
 export const icons = new webix.DataCollection({
-	scheme: {
-		$init: (obj) => {
-			obj.value = getIcon(obj.Value);
-		}
-	},
 	data: [
-		{id: "1", Value: "calendar"},
-		{id: "2", Value: "check"},
-		{id: "3", Value: "clock"},
-		{id: "4", Value: "pencil"},
-		{id: "5", Value: "close"},
-		{id: "6", Value: "sync"},
-		{id: "7", Value: "alert"},
-		{id: "8", Value: "eye"},
-		{id: "9", Value: "eye-slash"}
+		{id: "1", Icon: "flag"},
+		{id: "2", Icon: "comment"},
+		{id: "3", Icon: "clock"},
+		{id: "4", Icon: "phone"},
+		{id: "5", Icon: "cogs"},
+		{id: "6", Icon: "user"},
+		{id: "7", Icon: "pencil"},
+		{id: "8", Icon: "plus"},
+		{id: "9", Icon: "angle-down"},
+		{id: "10", Icon: "angle-left"},
+		{id: "11", Icon: "angle-right"},
+		{id: "12", Icon: "angle-up"},
+		{id: "13", Icon: "angle-double-right"},
+		{id: "14", Icon: "angle-double-left"},
+		{id: "15", Icon: "calendar"},
+		{id: "16", Icon: "search"},
+		{id: "17", Icon: "dots"},
+		{id: "18", Icon: "close"},
+		{id: "19", Icon: "checkbox-marked"},
+		{id: "20", Icon: "checkbox-blank"},
+		{id: "21", Icon: "trash"},
+		{id: "22", Icon: "eye"},
+		{id: "23", Icon: "eye-slash"},
+		{id: "24", Icon: "columns"},
+		{id: "25", Icon: "drag"},
+		{id: "26", Icon: "check"},
+		{id: "27", Icon: "underline"},
+		{id: "28", Icon: "bold"},
+		{id: "29", Icon: "italic"},
+		{id: "30", Icon: "sync"}
 	]
 });
