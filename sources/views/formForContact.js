@@ -24,7 +24,7 @@ export default class FormForContactView extends JetView {
 									label: _("First Name"),
 									view: "text",
 									name: "FirstName",
-									labelWidth: 100,
+									labelWidth: 150,
 									required: true,
 									invalidMessage: "Please, fill this field"
 								},
@@ -32,7 +32,7 @@ export default class FormForContactView extends JetView {
 									label: _("Last Name"),
 									view: "text",
 									name: "LastName",
-									labelWidth: 100,
+									labelWidth: 150,
 									required: true,
 									invalidMessage: "Please, fill this field"
 								},
@@ -41,7 +41,7 @@ export default class FormForContactView extends JetView {
 									view: "datepicker",
 									name: "StartDate",
 									format: webix.i18n.longDateFormatStr,
-									labelWidth: 100
+									labelWidth: 150
 								},
 								{
 									label: _("Status"),
@@ -53,31 +53,31 @@ export default class FormForContactView extends JetView {
 											template: "#Value#"
 										}
 									},
-									labelWidth: 100
+									labelWidth: 150
 								},
 								{
 									label: _("Job"),
 									view: "text",
 									name: "Job",
-									labelWidth: 100
+									labelWidth: 150
 								},
 								{
 									label: _("Company"),
 									view: "text",
 									name: "Company",
-									labelWidth: 100
+									labelWidth: 150
 								},
 								{
 									label: _("Website"),
 									view: "text",
 									name: "Website",
-									labelWidth: 100
+									labelWidth: 150
 								},
 								{
 									label: _("Address"),
 									view: "textarea",
 									name: "Address",
-									labelWidth: 100
+									labelWidth: 150
 								}
 							]
 						},
@@ -90,27 +90,27 @@ export default class FormForContactView extends JetView {
 											label: _("Email"),
 											view: "text",
 											name: "Email",
-											labelWidth: 100,
+											labelWidth: 150,
 											invalidMessage: "Please, input valid email"
 										},
 										{
 											label: "Skype",
 											view: "text",
 											name: "Skype",
-											labelWidth: 100
+											labelWidth: 150
 										},
 										{
 											label: _("Phone"),
 											view: "text",
 											name: "Phone",
-											labelWidth: 100
+											labelWidth: 150
 										},
 										{
 											label: _("Birthday"),
 											view: "datepicker",
 											name: "Birthday",
 											format: webix.i18n.longDateFormatStr,
-											labelWidth: 100
+											labelWidth: 150
 										}
 									]
 								},
@@ -139,7 +139,7 @@ export default class FormForContactView extends JetView {
 															reader.onload = () => this.$$("contactPhoto").setValues({Photo: reader.result});
 														},
 														onFileUploadError: () => {
-															webix.alert("Error during file upload");
+															webix.alert(_("Error during file upload"));
 														}
 													}
 												},
@@ -247,9 +247,9 @@ export default class FormForContactView extends JetView {
 				if (this.getParam("value") === "edit") {
 					this.form.setValues(item);
 					this.photo.setValues({Photo: item.Photo});
-					this.$$("btn").setValue("Save");
+					this.$$("btn").setValue(_("Save"));
 					this.$$("btn").refresh();
-					this.$$("label").setValue("Edit contact");
+					this.$$("label").setValue(_("Edit contact"));
 				}
 			}
 		});

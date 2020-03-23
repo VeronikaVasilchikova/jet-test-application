@@ -21,7 +21,7 @@ export default class ContactsView extends JetView {
 									view: "text",
 									localId: "inputFind",
 									css: "fltr",
-									placeholder: _("Type to find mathing contacts"),
+									placeholder: _("Type to search"),
 									on: {
 										onTimedKeyPress: () => {
 											let value = this.$$("inputFind").getValue().toLowerCase();

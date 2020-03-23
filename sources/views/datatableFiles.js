@@ -47,17 +47,13 @@ export default class DatatableFilesView extends JetView {
 								ok: _("Yes"),
 								cancel: _("No"),
 								text: _("Are you sure you want to remove this note?")
-							})
-								.then(() => {
-									webix.confirm({
-										title: _("Warning!"),
-										type: "confirm-warning",
-										text: _("You are about to agree. Are you sure?")
-									})
-										.then(() => {
-											fileStorage.remove(id);
-										});
-								});
+							}).then(() => webix.confirm({
+								title: _("Warning!"),
+								type: "confirm-warning",
+								text: _("You are about to agree. Are you sure?")
+							})).then(() => {
+								fileStorage.remove(id);
+							});
 							return false;
 						}
 					}

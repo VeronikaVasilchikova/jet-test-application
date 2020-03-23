@@ -6,7 +6,6 @@ export default {
 	Settings: "Settings",
 
 	/* for activities.js and datatableActivities.js */
-	Activities: "Activities",
 	All: "All",
 	Overdue: "Overdue",
 	Completed: "Completed",
@@ -27,8 +26,7 @@ export default {
 	"You are about to agree. Are you sure?": "You are about to agree. Are you sure?",
 
 	/* for contacts.js */
-	Contacts: "Contacts",
-	"Type to find mathing contacts": "Type to find mathing contacts",
+	"Type to search": "Type to search",
 	"Add contact": "Add contact",
 
 	/* for datatableFiles.js */

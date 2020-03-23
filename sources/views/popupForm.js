@@ -98,7 +98,7 @@ export default class PopupFormView extends JetView {
 
 	showPopupForm(id, idForName) {
 		const _ = this.app.getService("locale")._;
-		
+
 		if (id && activities.exists(id)) {
 			const item = activities.getItem(id);
 			this.form.setValues(item);
@@ -126,11 +126,9 @@ export default class PopupFormView extends JetView {
 			activities.waitSave(() => {
 				if (values && values.id) {
 					activities.updateItem(values.id, values);
-					this.app.callEvent("onClickSave");
 				}
 				else {
 					activities.add(values, 0);
-					this.app.callEvent("onClickSave", [values]);
 				}
 			});
 			this.closeForm();

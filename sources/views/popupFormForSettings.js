@@ -51,7 +51,7 @@ export default class PopupFormForSettingsView extends JetView {
 						{},
 						{
 							view: "button",
-							value: "Add",
+							value: _("Add"),
 							localId: "btn",
 							type: "form",
 							width: 150,
@@ -59,7 +59,7 @@ export default class PopupFormForSettingsView extends JetView {
 						},
 						{
 							view: "button",
-							value: "Cancel",
+							value: _("Cancel"),
 							type: "form",
 							width: 150,
 							click: () => this.closeForm()
@@ -78,11 +78,10 @@ export default class PopupFormForSettingsView extends JetView {
 
 	showPopupForm(id) {
 		const _ = this.app.getService("locale")._;
+
 		if (id && this._tdata.exists(id)) {
 			const item = this._tdata.getItem(id);
-			const icon = icons.find((obj) => {
-				return obj.Icon === item.Icon;
-			}, true);
+			const icon = icons.find(obj => obj.Icon === item.Icon, true);
 			if (icon) {
 				this.form.setValues({
 					id: item.id,

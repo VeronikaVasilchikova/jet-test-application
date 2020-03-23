@@ -26,8 +26,8 @@ export default class ActivitiesView extends JetView {
 										{
 											view: "tabbar",
 											localId: "tabbarFilter",
-											value: "All",
-											gravity: 2,
+											value: "all",
+											gravity: 2.5,
 											options:
 												[
 													{id: "all", value: _("All")},
@@ -118,17 +118,13 @@ export default class ActivitiesView extends JetView {
 												ok: _("Yes"),
 												cancel: _("No"),
 												text: _("Are you sure you want to remove this note?")
-											})
-												.then(() => {
-													webix.confirm({
-														title: _("Warning!"),
-														type: "confirm-warning",
-														text: _("You are about to agree. Are you sure?")
-													})
-														.then(() => {
-															activities.remove(id);
-														});
-												});
+											}).then(() => webix.confirm({
+												title: _("Warning!"),
+												type: "confirm-warning",
+												text: _("You are about to agree. Are you sure?")
+											})).then(() => {
+												activities.remove(id);
+											});
 											return false;
 										},
 										myicon: (e, id) => {
@@ -144,34 +140,40 @@ export default class ActivitiesView extends JetView {
 		};
 	}
 
+	dateInfo() {
+		const today = new Date();
+		const dateObj = {};
+		dateObj.currentDay = webix.Date.datePart(today);
+		dateObj.tomorrow = webix.Date.add(dateObj.currentDay, 1, "day", true);
+		dateObj.beginCurrentWeek = webix.Date.weekStart(dateObj.currentDay);
+		dateObj.beginCurrentMonth = webix.Date.monthStart(dateObj.currentDay);
+		return dateObj;
+	}
+
 	init() {
 		this.table = this.$$("table");
 		this._jetPopupForm = this.ui(PopupFormView);
 
-		function getDate() {
-			let today = new Date();
-			let date = {};
-			date.currentDay = webix.Date.datePart(today);
-			date.tomorrow = webix.Date.add(date.currentDay, 1, "day", true);
-			date.beginCurrentWeek = webix.Date.weekStart(date.currentDay);
-			date.beginCurrentMonth = webix.Date.monthStart(date.currentDay);
-			return date;
-		}
+		webix.promise.all([
+			contacts.waitData,
+			activities.waitData,
+			activitytypes.waitData
+		]).then(() => {
+			this.table.sync(activities);
+			activities.data.filter();
+		});
 
 		this.table.registerFilter(
 			this.$$("tabbarFilter"), {
 				columnId: "State",
 				compare: (value, filter, item) => {
-					const date = getDate();
-					let today = new Date();
-					let dateItem = item.DueDate;
-					let datepart = webix.Date.datePart(dateItem, true);
-					let beginWeek = webix.Date.weekStart(datepart);
-					let beginMonth = webix.Date.monthStart(datepart);
+					const date = this.dateInfo();
+					const today = new Date();
+					const dateItem = item.DueDate;
+					const datepart = webix.Date.datePart(dateItem, true);
+					const beginWeek = webix.Date.weekStart(datepart);
+					const beginMonth = webix.Date.monthStart(datepart);
 
-					if (filter === "all") {
-						return item;
-					}
 					if (filter === "overdue") {
 						return dateItem < today && value === "Open";
 					}
@@ -190,22 +192,16 @@ export default class ActivitiesView extends JetView {
 					if (filter === "thismonth") {
 						return webix.Date.equal(date.beginCurrentMonth, beginMonth) && value === "Open";
 					}
+					return item;
 				}
-			}, {
+			},
+			{
 				getValue: node => node.getValue(),
 				setValue: (node, value) => {
 					node.setValue(value);
 				}
 			}
 		);
-		webix.promise.all([
-			contacts.waitData,
-			activities.waitData,
-			activitytypes.waitData
-		]).then(() => {
-			this.table.sync(activities);
-			activities.data.filter();
-		});
 	}
 
 	editItem(id) {

@@ -7,8 +7,8 @@ export default {
 
 	/* for activities.js and datatableActivities.js */
 	All: "Все",
-	Overdue: "Просроченный",
-	Completed: "Завершенный",
+	Overdue: "Просроченные",
+	Completed: "Завершенные",
 	Today: "Сегодня",
 	Tomorrow: "Завтра",
 	"This week": "На этой неделе",
@@ -26,7 +26,7 @@ export default {
 	"You are about to agree. Are you sure?": "Вы собираетесь согласиться. Вы уверены?",
 
 	/* for contacts.js */
-	"Type to find mathing contacts": "Печатайте, чтобы найти подходящие контакты",
+	"Type to search": "Печатайте, чтобы найти",
 	"Add contact": "Добавить контакт",
 
 	/* for datatableFiles.js */

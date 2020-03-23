@@ -59,14 +59,14 @@ export default class DatatableActivitiesView extends JetView {
 					onClick: {
 						"wxi-trash": (e, id) => {
 							webix.confirm({
-								title: "Remove this note",
-								ok: "Yes",
-								cancel: "No",
-								text: "Are you sure you want to remove this note?"
+								title: _("Remove this note"),
+								ok: _("Yes"),
+								cancel: _("No"),
+								text: _("Are you sure you want to remove this note?")
 							}).then(() => webix.confirm({
-								title: "Warning!",
+								title: _("Warning!"),
 								type: "confirm-warning",
-								text: "You are about to agree. Are you sure?"
+								text: _("You are about to agree. Are you sure?")
 							})).then(() => {
 								activities.remove(id);
 							});
