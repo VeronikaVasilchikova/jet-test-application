@@ -96,17 +96,15 @@ export default class PopupFormView extends JetView {
 		this.form = this.$$("form");
 	}
 
-	showPopupForm(id, idForName = "") {
+	showPopupForm(id, idForName) {
 		const _ = this.app.getService("locale")._;
-
+		
 		if (id && activities.exists(id)) {
 			const item = activities.getItem(id);
 			this.form.setValues(item);
 		}
-		if (!id && idForName) {
-			this.form.setValues({ContactID: idForName});
-			this.$$("ContactID").disable();
-		}
+		this.$$("ContactID").setValue(idForName);
+		this.$$("ContactID").disable();
 		this.getRoot().show();
 		const someAction = id ? _("Edit activity") : _("Add activity");
 		this.getRoot().getHead().setHTML(someAction);

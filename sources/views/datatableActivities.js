@@ -1,5 +1,6 @@
 import {JetView} from "webix-jet";
 import PopupFormView from "./popupForm";
+import {contacts} from "../models/contacts";
 import {activities} from "../models/activities";
 import {activitytypes} from "../models/activitytypes";
 
@@ -11,7 +12,7 @@ export default class DatatableActivitiesView extends JetView {
 			rows: [
 				{
 					view: "datatable",
-					id: "datatableAct",
+					localId: "datatableAct",
 					scroll: "y",
 					css: "webix_data_border webix_header_border",
 					autoconfig: true,
@@ -58,26 +59,21 @@ export default class DatatableActivitiesView extends JetView {
 					onClick: {
 						"wxi-trash": (e, id) => {
 							webix.confirm({
-								title: _("Remove this note"),
-								ok: _("Yes"),
-								cancel: _("No"),
-								text: _("Are you sure you want to remove this note?")
-							})
-								.then(() => {
-									webix.confirm({
-										title: _("Warning!"),
-										type: "confirm-warning",
-										text: _("You are about to agree. Are you sure?")
-									})
-										.then(() => {
-											activities.remove(id);
-											this.table.remove(id);
-										});
-								});
+								title: "Remove this note",
+								ok: "Yes",
+								cancel: "No",
+								text: "Are you sure you want to remove this note?"
+							}).then(() => webix.confirm({
+								title: "Warning!",
+								type: "confirm-warning",
+								text: "You are about to agree. Are you sure?"
+							})).then(() => {
+								activities.remove(id);
+							});
 							return false;
 						},
 						myicon: (e, id) => {
-							this.editItem(id.row);
+							this.editOrAddItem(id.row);
 						}
 					}
 				},
@@ -91,7 +87,7 @@ export default class DatatableActivitiesView extends JetView {
 							label: _("Add activity"),
 							inputWidth: 200,
 							align: "right",
-							click: () => this.addItem()
+							click: () => this.editOrAddItem()
 						}
 					]
 				}
@@ -99,48 +95,29 @@ export default class DatatableActivitiesView extends JetView {
 		};
 	}
 
-	filterActivities(id) {
-		this.table = this.$$("datatableAct");
-		this.table.clearAll();
-		this.table.parse(
-			activities.find(item => item.ContactID === id)
-		);
-	}
-
 	init() {
 		this._jetPopupForm = this.ui(PopupFormView);
 		this.table = this.$$("datatableAct");
-
-		activities.waitData.then(() => {
-			const id = this.getParam("id", true);
-			const idVal = Number(id);
-			this.filterActivities(idVal);
-		});
-
-		this.on(this.app, "onClickSave", (values) => {
-			if (values) {
-				this.table.parse(values);
-			}
-			this.table.refresh();
-		});
+		this.table.sync(activities);
 	}
 
-	editItem(id) {
-		if (id) {
-			this._jetPopupForm.showPopupForm(id);
+	editOrAddItem(id) {
+		const idForName = this.getParam("id", true);
+		if (idForName) {
+			this._jetPopupForm.showPopupForm(id, idForName);
 		}
 	}
 
-	addItem() {
-		const idForName = this.getParam("id", true);
-		this._jetPopupForm.showPopupForm("", idForName);
-	}
-
 	urlChange() {
-		activities.waitData.then(() => {
+		webix.promise.all([
+			contacts.waitData,
+			activities.waitData,
+			activitytypes.waitData
+		]).then(() => {
 			const id = this.getParam("id", true);
-			const idVal = Number(id);
-			this.filterActivities(idVal);
+			if (id && contacts.exists(id)) {
+				activities.data.filter(item => item.ContactID.toString() === id.toString());
+			}
 		});
 	}
 }

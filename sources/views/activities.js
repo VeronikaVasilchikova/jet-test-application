@@ -146,7 +146,6 @@ export default class ActivitiesView extends JetView {
 
 	init() {
 		this.table = this.$$("table");
-		this.table.sync(activities);
 		this._jetPopupForm = this.ui(PopupFormView);
 
 		function getDate() {
@@ -199,6 +198,14 @@ export default class ActivitiesView extends JetView {
 				}
 			}
 		);
+		webix.promise.all([
+			contacts.waitData,
+			activities.waitData,
+			activitytypes.waitData
+		]).then(() => {
+			this.table.sync(activities);
+			activities.data.filter();
+		});
 	}
 
 	editItem(id) {

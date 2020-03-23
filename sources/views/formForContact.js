@@ -194,12 +194,19 @@ export default class FormForContactView extends JetView {
 
 	init() {
 		this.form = this.$$("formForContact");
+		this.photo = this.$$("contactPhoto");
 	}
 
-	closeForm() {
+	closeForm(id) {
 		this.form.clear();
 		this.form.clearValidation();
-		this.show("./details");
+		this.photo.setValues({Photo: ""});
+		if (id) {
+			this.show(`/top/contacts?id=${id}/details`);
+		}
+		else {
+			this.show("./details");
+		}
 	}
 
 	addOrEdit() {
@@ -207,6 +214,7 @@ export default class FormForContactView extends JetView {
 
 		if (this.form.validate()) {
 			const values = this.form.getValues();
+			values.Photo = this.photo.getValues().Photo;
 			contacts.waitSave(() => {
 				if (values && values.id) {
 					contacts.updateItem(values.id, values);
@@ -216,8 +224,9 @@ export default class FormForContactView extends JetView {
 					contacts.add(values, 0);
 					webix.message({type: "success", text: _("Contact was added successfully!")});
 				}
+			}).then((res) => {
+				this.closeForm(res.id);
 			});
-			this.closeForm();
 		}
 	}
 
@@ -233,12 +242,15 @@ export default class FormForContactView extends JetView {
 			contacts.waitData
 		]).then(() => {
 			const id = this.getParam("id", true);
-			const item = contacts.getItem(id);
-			if (this.getParam("value") === "edit") {
-				this.form.setValues(item);
-				this.$$("btn").setValue(_("Save"));
-				this.$$("btn").refresh();
-				this.$$("label").setValue(_("Edit contact"));
+			if (id && contacts.exists(id)) {
+				const item = contacts.getItem(id);
+				if (this.getParam("value") === "edit") {
+					this.form.setValues(item);
+					this.photo.setValues({Photo: item.Photo});
+					this.$$("btn").setValue("Save");
+					this.$$("btn").refresh();
+					this.$$("label").setValue("Edit contact");
+				}
 			}
 		});
 	}

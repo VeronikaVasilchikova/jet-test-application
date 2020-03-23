@@ -10,7 +10,7 @@ export default class DatatableFilesView extends JetView {
 			rows: [
 				{
 					view: "datatable",
-					id: "datatableFile",
+					localId: "datatableFile",
 					type: "uploader",
 					scroll: "y",
 					css: "webix_data_border webix_header_border",
@@ -102,7 +102,7 @@ export default class DatatableFilesView extends JetView {
 	urlChange() {
 		const id = this.getParam("id", true);
 		this.$$("datatableFile").sync(fileStorage, () => {
-			this.$$("datatableFile").filter(item => item.ContactID === id);
+			this.$$("datatableFile").filter(item => item.ContactID.toString() === id.toString());
 		});
 	}
 }
