@@ -100,7 +100,7 @@ export default class DatatableFilesView extends JetView {
 	urlChange() {
 		const id = this.getParam("id", true);
 		this.$$("datatableFile").sync(fileStorage, () => {
-			this.$$("datatableFile").filter(item => item.ContactID === id);
+			this.$$("datatableFile").filter(item => item.ContactID.toString() === id.toString());
 		});
 	}
 }
