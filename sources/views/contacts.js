@@ -14,22 +14,33 @@ export default class ContactsView extends JetView {
 				{
 					cols: [
 						{
-							width: 300,
-							view: "list",
-							localId: "listOfContacts",
-							scroll: "y",
-							select: true,
-							type: {
-								template: obj => `
-									<div class="contact">
-										<image class="contactphoto" src="data/photo/contact_photo.jpg" />
-										<div>
-											<span class="contactname">${obj.FirstName} ${obj.LastName}</span>
-											<span class="email">${obj.Email}</span>
-										</div>
-									</div>`,
-								height: 66
-							}
+							rows: [
+								{
+									width: 300,
+									view: "list",
+									localId: "listOfContacts",
+									scroll: "y",
+									select: true,
+									type: {
+										template: obj => `
+											<div class="contact">
+												<image class="contactphoto" src="${obj.Photo || "data/photo/contact_photo.jpg"}" />
+												<div>
+													<span class="contactname">${obj.FirstName} ${obj.LastName}</span>
+													<span class="email">${obj.Email}</span>
+												</div>
+											</div>`,
+										height: 66
+									}
+								},
+								{
+									view: "button",
+									type: "icon",
+									icon: "wxi-plus-square",
+									label: "Add contact",
+									click: () => this.show("./formForContact?value=add")
+								}
+							]
 						},
 						{$subview: true}
 					]
@@ -51,5 +62,12 @@ export default class ContactsView extends JetView {
 			this.setParam("id", id, true);
 			this.show("./details");
 		});
+	}
+
+	urlChange() {
+		const id = this.getParam("id");
+		if (id && contacts.exists(id)) {
+			this.list.select(id);
+		}
 	}
 }

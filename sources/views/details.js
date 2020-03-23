@@ -1,37 +1,35 @@
 import {JetView} from "webix-jet";
 import {contacts} from "../models/contacts";
 import {statuses} from "../models/statuses";
+import {activities} from "../models/activities";
+import {fileStorage} from "../models/filestorage";
+import DatatableActivitiesView from "./datatableActivities";
+import DatatableFilesView from "./datatableFiles";
 
 export default class DetailsView extends JetView {
 	config() {
 		const details = {
-			type: "clean",
-			cols: [
-				{
-					localId: "contactsTemplate",
-					template: `
-					<h2>#FirstName# #LastName#</h2>
-					<div class='details'>
-						<div>
-							<image class="contactphoto" src="data/photo/contact_photo.jpg" />
-							<div class="status">Status #newStatusID#</div>
-						</div>
-						<div>
-							<i class="fas fa-envelope"></i>#Email#<br><br>
-							<i class="fab fa-skype"></i>#Skype#<br><br>
-							<i class="fas fa-pencil-ruler"></i>#Job#<br><br>
-							<i class="fas fa-briefcase"></i>#Company#
-						</div>
-						<div>
-							<span class='webix_icon wxi-calendar'></span>#Birthday#<br><br>
-							<i class="fas fa-map-marker-alt"></i>#Address#
-						</div>
-					</div>
-				`
-				}
-			]
+			localId: "contactsTemplate",
+			template: obj => `
+			<h2>${obj.FirstName} ${obj.LastName}</h2>
+			<div class='details'>
+				<div>
+					<image class="contactphoto" src="${obj.Photo || "data/photo/contact_photo.jpg"}" />
+					<div class="status">Status ${obj.newStatusID}</div>
+				</div>
+				<div>
+					<i class="fas fa-envelope"></i>${obj.Email}<br><br>
+					<i class="fab fa-skype"></i>${obj.Skype}<br><br>
+					<i class="fas fa-pencil-ruler"></i>${obj.Job}<br><br>
+					<i class="fas fa-briefcase"></i>${obj.Company}
+				</div>
+				<div>
+					<span class='webix_icon wxi-calendar'></span>${webix.i18n.longDateFormatStr(obj.Birthday)}<br><br>
+					<i class="fas fa-map-marker-alt"></i>${obj.Address}
+				</div>
+			</div>
+		`
 		};
-
 		const buttons = {
 			padding: 25,
 			css: "details_buttons",
@@ -44,7 +42,8 @@ export default class DetailsView extends JetView {
 							css: "webix_primary",
 							label: "Delete",
 							type: "icon",
-							icon: "far fa-trash-alt"
+							icon: "far fa-trash-alt",
+							click: () => this.deleteContact()
 						},
 						{
 							view: "button",
@@ -52,24 +51,47 @@ export default class DetailsView extends JetView {
 							css: "webix_primary",
 							label: "Edit",
 							type: "icon",
-							icon: "fas fa-edit"
+							icon: "fas fa-edit",
+							click: () => this.editContact()
 						}
 					]
 				},
 				{}
 			]
 		};
+		const tabbar = {
+			view: "tabbar",
+			value: "activities",
+			localId: "tabbar",
+			options: [
+				{value: "Activities", id: "activities"},
+				{value: "Files", id: "files"}
+			],
+			height: 50
+		};
 
 		return {
+			type: "clean",
 			rows: [
 				{
 					cols: [
 						details,
 						buttons
 					]
+				},
+				tabbar,
+				{
+					cells: [
+						{localId: "activities", rows: [DatatableActivitiesView]},
+						{localId: "files", rows: [DatatableFilesView]}
+					]
 				}
 			]
 		};
+	}
+
+	init() {
+		this.$$("tabbar").attachEvent("onChange", id => this.$$(id).show());
 	}
 
 	urlChange() {
@@ -86,5 +108,47 @@ export default class DetailsView extends JetView {
 				this.$$("contactsTemplate").parse(contact);
 			}
 		});
+	}
+
+	deleteContact() {
+		const id = this.getParam("id", true);
+		if (id && contacts.exists(id)) {
+			webix.confirm({
+				title: "Remove this contact",
+				ok: "Yes",
+				cancel: "No",
+				text: "Are you sure you want to remove this contact?"
+			})
+				.then(() => {
+					webix.confirm({
+						title: "Warning!",
+						type: "confirm-warning",
+						text: "You are about to agree. Are you sure?"
+					})
+						.then(() => {
+							contacts.remove(id);
+
+							const contactsActivities = activities
+								.find(obj => obj.ContactID.toString() === id.toString());
+
+							contactsActivities.forEach((item) => {
+								activities.remove(item.id);
+							});
+							const contactsFiles = fileStorage
+								.find(obj => obj.ContactID.toString() === id.toString());
+
+							contactsFiles.forEach((item) => {
+								fileStorage.remove(item.id);
+							});
+							const switchId = contacts.getFirstId();
+							this.show(`/top/contacts?id=${switchId}/details`);
+						});
+				});
+		}
+	}
+
+	editContact() {
+		const values = this.$$("contactsTemplate").getValues();
+		this.show(`/top/contacts?id=${values.id}/formForContact?value=edit`);
 	}
 }

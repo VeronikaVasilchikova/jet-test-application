@@ -95,3 +95,18 @@
 .head_popup {
     text-align: center;
 }
+
+/*styles for formForContact*/
+
+.form.contactphoto {
+    display: block;
+    border-radius: 5px;
+    width: 150px;
+    height: 150px;
+}
+
+/*styles for formForContact*/
+
+.fas.fa-cloud-upload-alt {
+    margin-right: 10px;
+}
