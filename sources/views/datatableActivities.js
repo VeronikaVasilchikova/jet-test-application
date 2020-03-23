@@ -101,11 +101,8 @@ export default class DatatableActivitiesView extends JetView {
 
 	editOrAddItem(id) {
 		const idForName = this.getParam("id", true);
-		if (id && idForName) {
+		if (idForName) {
 			this._jetPopupForm.showPopupForm(id, idForName);
-		}
-		if (!id && idForName) {
-			this._jetPopupForm.showPopupForm("", idForName);
 		}
 	}
 
