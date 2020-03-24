@@ -100,8 +100,7 @@ export default class DetailsView extends JetView {
 	urlChange() {
 		webix.promise.all([
 			contacts.waitData,
-			statuses.waitData,
-			activities.waitData
+			statuses.waitData
 		]).then(() => {
 			const id = this.getParam("id", true);
 			if (id && contacts.exists(id)) {
