@@ -29,7 +29,9 @@ export default class ContactsView extends JetView {
 												let firstName = obj.FirstName.toLowerCase().indexOf(value);
 												let lastName = obj.LastName.toLowerCase().indexOf(value);
 												let job = obj.Job.toLowerCase().indexOf(value);
-												return firstName !== -1 || lastName !== -1 || job !== -1;
+												let skype = obj.Skype.toLowerCase().indexOf(value);
+												let email = obj.Email.toLowerCase().indexOf(value);
+												return [firstName, lastName, job, skype, email].some(item => item !== -1);
 											});
 										}
 									}

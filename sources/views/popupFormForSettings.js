@@ -25,13 +25,15 @@ export default class PopupFormForSettingsView extends JetView {
 					{
 						view: "text",
 						label: _(this.label),
-						labelWidth: 100,
-						name: "Value"
+						labelWidth: 150,
+						name: "Value",
+						required: true,
+						invalidMessage: _("The field must be filled")
 					},
 					{
 						view: "richselect",
 						label: "Icons",
-						labelWidth: 100,
+						labelWidth: 150,
 						name: "Icon",
 						options: {
 							view: "datasuggest",
@@ -45,7 +47,9 @@ export default class PopupFormForSettingsView extends JetView {
 								},
 								data: icons
 							}
-						}
+						},
+						required: true,
+						invalidMessage: _("Icon must be selected")
 					},
 					{cols: [
 						{},
@@ -55,6 +59,7 @@ export default class PopupFormForSettingsView extends JetView {
 							localId: "btn",
 							type: "form",
 							width: 150,
+							height: 50,
 							click: () => this.addOrEdit()
 						},
 						{
@@ -62,6 +67,7 @@ export default class PopupFormForSettingsView extends JetView {
 							value: _("Cancel"),
 							type: "form",
 							width: 150,
+							height: 50,
 							click: () => this.closeForm()
 						}
 					]},
@@ -99,8 +105,8 @@ export default class PopupFormForSettingsView extends JetView {
 		}
 		this.getRoot().show();
 		const someAction = id ? _("Edit") : _("Add");
-		this.getRoot().getHead().setHTML(someAction);
-		this.$$("btn").setValue(someAction);
+		this.getRoot().getHead().setHTML(`${someAction} ${_(this.label).toLowerCase()}`);
+		this.$$("btn").setValue(`${someAction} ${_(this.label).toLowerCase()}`);
 	}
 
 	closeForm() {
@@ -109,16 +115,18 @@ export default class PopupFormForSettingsView extends JetView {
 	}
 
 	addOrEdit() {
-		const values = this.form.getValues();
-		values.Icon = icons.getItem(values.Icon).Icon;
-		this._tdata.waitSave(() => {
-			if (values && values.id) {
-				this._tdata.updateItem(values.id, values);
-			}
-			else {
-				this._tdata.add(values, 0);
-			}
-		});
-		this.closeForm();
+		if (this.form.validate()) {
+			const values = this.form.getValues();
+			values.Icon = icons.getItem(values.Icon).Icon;
+			this._tdata.waitSave(() => {
+				if (values && values.id) {
+					this._tdata.updateItem(values.id, values);
+				}
+				else {
+					this._tdata.add(values, 0);
+				}
+			});
+			this.closeForm();
+		}
 	}
 }

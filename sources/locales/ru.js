@@ -14,7 +14,7 @@ export default {
 	"This week": "На этой неделе",
 	"This month": "В этом месяце",
 	"Add activity": "Добавить действие",
-	"Activity type": "Вид деятельности",
+	"Activity type": "Вид действия",
 	"Due date": "Срок выполнения",
 	Details: "Детали",
 	Contact: "Контакт",
@@ -72,17 +72,21 @@ export default {
 	"Contact must be selected": "Контакт должен быть выбран",
 	Date: "Дата",
 	Time: "Время",
-	"Edit activity": "Редактировать деятельность",
+	"Edit activity": "Редактировать действие",
 
 	/* for settingstable.js */
 	EN: "АНГЛ",
 	RU: "РУС",
 	"Are you sure you want to delete this?": "Вы уверены, что хотите удалить это?",
-	"Activity types": "Виды деятельности",
+	"Activity types": "Виды действий",
 	Icon: "Иконка",
 	Statuses: "Статусы",
 	"Add type": "Добавить вид",
-	"New activity type": "Новый вид деятельности",
+	"New activity type": "Новый вид действия",
 	"Add status": "Добавить статус",
-	"New contact status": "Новый статус контакта"
+	"New contact status": "Новый статус контакта",
+
+	/* for popupFormForSettingstable.js */
+	"The field must be filled": "Поле должно быть заполнено",
+	"Icon must be selected": "Иконка должна быть выбрана"
 };

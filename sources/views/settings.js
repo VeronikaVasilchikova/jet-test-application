@@ -27,9 +27,9 @@ export default class SettingsView extends JetView {
 				segmented,
 				{
 					cols: [
-						{$subview: new SettingsTableView(this.app, "", activitytypes, "Activity types", "Activity types")},
+						{$subview: new SettingsTableView(this.app, "", activitytypes, "Activity type", "Activity types")},
 						{width: 5},
-						{$subview: new SettingsTableView(this.app, "", statuses, "Statuses", "Statuses")}
+						{$subview: new SettingsTableView(this.app, "", statuses, "Status", "Statuses")}
 					]
 				}
 			]

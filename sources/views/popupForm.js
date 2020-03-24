@@ -71,6 +71,7 @@ export default class PopupFormView extends JetView {
 							localId: "btn",
 							type: "form",
 							width: 150,
+							height: 50,
 							click: () => this.addOrEdit()
 						},
 						{
@@ -78,6 +79,7 @@ export default class PopupFormView extends JetView {
 							value: _("Cancel"),
 							type: "form",
 							width: 150,
+							height: 50,
 							click: () => this.closeForm()
 						}
 					]},
@@ -103,8 +105,11 @@ export default class PopupFormView extends JetView {
 			const item = activities.getItem(id);
 			this.form.setValues(item);
 		}
-		this.$$("ContactID").setValue(idForName);
-		this.$$("ContactID").disable();
+		if (idForName && contacts.exists(idForName)) {
+			this.$$("ContactID").setValue(idForName);
+			this.$$("ContactID").disable();
+		}
+
 		this.getRoot().show();
 		const someAction = id ? _("Edit activity") : _("Add activity");
 		this.getRoot().getHead().setHTML(someAction);

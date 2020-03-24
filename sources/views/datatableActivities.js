@@ -30,7 +30,12 @@ export default class DatatableActivitiesView extends JetView {
 							header: [{content: "selectFilter"}],
 							sort: "text",
 							fillspace: true,
-							options: activitytypes
+							options: activitytypes,
+							template: (obj) => {
+								const activityType = activitytypes.getItem(obj.TypeID).Value;
+								const icon = activitytypes.getItem(obj.TypeID).Icon;
+								return `${activityType} <span class="webix_icon wxi-${icon}"></span>`;
+							}
 						},
 						{
 							id: "DueDate",

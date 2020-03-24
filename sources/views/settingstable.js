@@ -2,9 +2,10 @@ import {JetView} from "webix-jet";
 import PopupFormForSettingsView from "./popupFormForSettings";
 
 export default class SettingsTableView extends JetView {
-	constructor(app, name, data, label) {
+	constructor(app, name, data, header, label) {
 		super(app, name);
 		this._tdata = data;
+		this.header = header;
 		this.label = label;
 	}
 
@@ -25,7 +26,7 @@ export default class SettingsTableView extends JetView {
 			columns: [
 				{
 					id: "Value",
-					header: _(this.label),
+					header: _(this.header),
 					fillspace: true
 				},
 				{
@@ -48,8 +49,8 @@ export default class SettingsTableView extends JetView {
 			onClick: {
 				"wxi-trash": (e, id) => {
 					webix.confirm({
-						text: _("Are you sure you want to delete this?"),
-						ok: _("Ok"),
+						text: _("Are you sure you want to remove this note?"),
+						ok: _("Yes"),
 						cancel: _("Cancel")
 					}).then(() => {
 						this._tdata.remove(id);
@@ -92,7 +93,7 @@ export default class SettingsTableView extends JetView {
 
 	init() {
 		this.$$("datatable").sync(this._tdata);
-		this._jetPopupForm = this.ui(new PopupFormForSettingsView(this.app, "", this._tdata, this.label, this.icons));
+		this._jetPopupForm = this.ui(new PopupFormForSettingsView(this.app, "", this._tdata, this.header, this.icons));
 	}
 
 	editOrAddItem(id) {

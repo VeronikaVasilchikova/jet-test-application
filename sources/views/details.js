@@ -17,7 +17,8 @@ export default class DetailsView extends JetView {
 			<div class='details'>
 				<div>
 					<image class="contactphoto" src="${obj.Photo || "data/photo/contact_photo.jpg"}" />
-					<div class="status">Status ${obj.newStatusID}</div>
+					<span class="status">Status ${obj.newStatusID}</span>
+					<span class='webix_icon wxi-${obj.newIcon}'></span>
 				</div>
 				<div>
 					<i class="fas fa-envelope"></i>${obj.Email}<br><br>
@@ -40,7 +41,7 @@ export default class DetailsView extends JetView {
 					cols: [
 						{
 							view: "button",
-							width: 150,
+							width: 160,
 							css: "webix_primary",
 							label: _("Delete"),
 							type: "icon",
@@ -49,7 +50,7 @@ export default class DetailsView extends JetView {
 						},
 						{
 							view: "button",
-							width: 150,
+							width: 160,
 							css: "webix_primary",
 							label: _("Edit"),
 							type: "icon",
@@ -99,13 +100,15 @@ export default class DetailsView extends JetView {
 	urlChange() {
 		webix.promise.all([
 			contacts.waitData,
-			statuses.waitData
+			statuses.waitData,
+			activities.waitData
 		]).then(() => {
 			const id = this.getParam("id", true);
 			if (id && contacts.exists(id)) {
 				const contact = webix.copy(contacts.getItem(id));
 				if (contact.StatusID) {
 					contact.newStatusID = statuses.getItem(contact.StatusID).Value || "";
+					contact.newIcon = statuses.getItem(contact.StatusID).Icon || "";
 				}
 				this.$$("contactsTemplate").parse(contact);
 			}

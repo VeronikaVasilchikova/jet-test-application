@@ -78,7 +78,12 @@ export default class ActivitiesView extends JetView {
 											header: [_("Activity type"), {content: "selectFilter"}],
 											sort: "text",
 											fillspace: true,
-											options: activitytypes
+											options: activitytypes,
+											template: (obj) => {
+												const activityType = activitytypes.getItem(obj.TypeID).value;
+												const icon = activitytypes.getItem(obj.TypeID).Icon;
+												return `${activityType} <span class="webix_icon wxi-${icon}"></span>`;
+											}
 										},
 										{
 											id: "DueDate",
@@ -196,9 +201,9 @@ export default class ActivitiesView extends JetView {
 				}
 			},
 			{
-				getValue: node => node.getValue(),
-				setValue: (node, value) => {
-					node.setValue(value);
+				getValue: input => input.getValue(),
+				setValue: (input, value) => {
+					input.setValue(value);
 				}
 			}
 		);

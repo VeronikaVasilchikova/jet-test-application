@@ -78,11 +78,15 @@ export default {
 	EN: "EN",
 	RU: "RU",
 	"Are you sure you want to delete this?": "Are you sure you want to delete this?",
-	"Activity types": "Activity Types",
+	"Activity types": "Activity types",
 	Icon: "Icon",
 	Statuses: "Statuses",
 	"Add type": "Add type",
 	"New activity type": "New activity type",
 	"Add status": "Add status",
-	"New contact status": "New contact status"
+	"New contact status": "New contact status",
+
+	/* for popupFormForSettingstable.js */
+	"The field must be filled": "The field must be filled",
+	"Icon must be selected": "Icon must be selected"
 };
