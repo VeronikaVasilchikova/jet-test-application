@@ -41,7 +41,7 @@ export default class DetailsView extends JetView {
 					cols: [
 						{
 							view: "button",
-							width: 160,
+							autowidth: true,
 							css: "webix_primary",
 							label: _("Delete"),
 							type: "icon",
@@ -50,7 +50,7 @@ export default class DetailsView extends JetView {
 						},
 						{
 							view: "button",
-							width: 160,
+							autowidth: true,
 							css: "webix_primary",
 							label: _("Edit"),
 							type: "icon",

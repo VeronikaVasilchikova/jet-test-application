@@ -27,7 +27,6 @@ export default class ActivitiesView extends JetView {
 											view: "tabbar",
 											localId: "tabbarFilter",
 											value: "all",
-											gravity: 2.5,
 											options:
 												[
 													{id: "all", value: _("All")},
@@ -49,8 +48,7 @@ export default class ActivitiesView extends JetView {
 											type: "icon",
 											icon: "wxi-plus-square",
 											label: _("Add activity"),
-											inputWidth: 200,
-											gravity: 1,
+											autowidth: true,
 											css: "add_activity",
 											align: "right",
 											click: () => this.addItem()

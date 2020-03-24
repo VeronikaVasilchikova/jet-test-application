@@ -52,13 +52,11 @@ export default class PopupFormForSettingsView extends JetView {
 						invalidMessage: _("Icon must be selected")
 					},
 					{cols: [
-						{},
 						{
 							view: "button",
 							value: _("Add"),
 							localId: "btn",
 							type: "form",
-							width: 150,
 							height: 50,
 							click: () => this.addOrEdit()
 						},
@@ -66,7 +64,6 @@ export default class PopupFormForSettingsView extends JetView {
 							view: "button",
 							value: _("Cancel"),
 							type: "form",
-							width: 150,
 							height: 50,
 							click: () => this.closeForm()
 						}

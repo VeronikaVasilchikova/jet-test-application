@@ -64,22 +64,17 @@ export default class PopupFormView extends JetView {
 						uncheckValue: "Open"
 					},
 					{cols: [
-						{},
 						{
 							view: "button",
 							value: _("Add"),
 							localId: "btn",
 							type: "form",
-							width: 150,
-							height: 50,
 							click: () => this.addOrEdit()
 						},
 						{
 							view: "button",
 							value: _("Cancel"),
 							type: "form",
-							width: 150,
-							height: 50,
 							click: () => this.closeForm()
 						}
 					]},

@@ -69,7 +69,7 @@ export default class SettingsTableView extends JetView {
 			type: "icon",
 			icon: "wxi-plus-square",
 			css: "webix_primary",
-			width: 150,
+			autowidth: true,
 			align: "center",
 			click: () => {
 				this.editOrAddItem();
