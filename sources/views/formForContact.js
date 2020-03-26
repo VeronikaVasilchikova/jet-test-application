@@ -4,13 +4,15 @@ import {contacts} from "../models/contacts";
 
 export default class FormForContactView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		return {
 			view: "form",
 			localId: "formForContact",
 			elements: [
 				{
 					view: "label",
-					label: "Add new contact",
+					label: _("Add new contact"),
 					localId: "label"
 				},
 				{
@@ -19,30 +21,30 @@ export default class FormForContactView extends JetView {
 						{
 							rows: [
 								{
-									label: "First Name",
+									label: _("First Name"),
 									view: "text",
 									name: "FirstName",
-									labelWidth: 100,
+									labelWidth: 150,
 									required: true,
 									invalidMessage: "Please, fill this field"
 								},
 								{
-									label: "Last Name",
+									label: _("Last Name"),
 									view: "text",
 									name: "LastName",
-									labelWidth: 100,
+									labelWidth: 150,
 									required: true,
 									invalidMessage: "Please, fill this field"
 								},
 								{
-									label: "Joining date",
+									label: _("Joining date"),
 									view: "datepicker",
 									name: "StartDate",
 									format: webix.i18n.longDateFormatStr,
-									labelWidth: 100
+									labelWidth: 150
 								},
 								{
-									label: "Status",
+									label: _("Status"),
 									view: "combo",
 									name: "StatusID",
 									options: {
@@ -51,31 +53,31 @@ export default class FormForContactView extends JetView {
 											template: "#Value#"
 										}
 									},
-									labelWidth: 100
+									labelWidth: 150
 								},
 								{
-									label: "Job",
+									label: _("Job"),
 									view: "text",
 									name: "Job",
-									labelWidth: 100
+									labelWidth: 150
 								},
 								{
-									label: "Company",
+									label: _("Company"),
 									view: "text",
 									name: "Company",
-									labelWidth: 100
+									labelWidth: 150
 								},
 								{
-									label: "Website",
+									label: _("Website"),
 									view: "text",
 									name: "Website",
-									labelWidth: 100
+									labelWidth: 150
 								},
 								{
-									label: "Address",
+									label: _("Address"),
 									view: "textarea",
 									name: "Address",
-									labelWidth: 100
+									labelWidth: 150
 								}
 							]
 						},
@@ -85,30 +87,30 @@ export default class FormForContactView extends JetView {
 								{
 									rows: [
 										{
-											label: "Email",
+											label: _("Email"),
 											view: "text",
 											name: "Email",
-											labelWidth: 100,
+											labelWidth: 150,
 											invalidMessage: "Please, input valid email"
 										},
 										{
 											label: "Skype",
 											view: "text",
 											name: "Skype",
-											labelWidth: 100
+											labelWidth: 150
 										},
 										{
-											label: "Phone",
+											label: _("Phone"),
 											view: "text",
 											name: "Phone",
-											labelWidth: 100
+											labelWidth: 150
 										},
 										{
-											label: "Birthday",
+											label: _("Birthday"),
 											view: "datepicker",
 											name: "Birthday",
 											format: webix.i18n.longDateFormatStr,
-											labelWidth: 100
+											labelWidth: 150
 										}
 									]
 								},
@@ -126,7 +128,7 @@ export default class FormForContactView extends JetView {
 												{},
 												{
 													view: "uploader",
-													label: "Change photo",
+													label: _("Change photo"),
 													accept: "image/jpeg, image/png",
 													autosend: false,
 													multiple: false,
@@ -137,14 +139,14 @@ export default class FormForContactView extends JetView {
 															reader.onload = () => this.$$("contactPhoto").setValues({Photo: reader.result});
 														},
 														onFileUploadError: () => {
-															webix.alert("Error during file upload");
+															webix.alert(_("Error during file upload"));
 														}
 													}
 												},
 												{
 													view: "button",
 													type: "form",
-													label: "Delete photo",
+													label: _("Delete photo"),
 													click: () => this.deletePhoto()
 												}
 											]
@@ -163,14 +165,14 @@ export default class FormForContactView extends JetView {
 							cols: [
 								{
 									view: "button",
-									value: "Cancel",
+									value: _("Cancel"),
 									type: "form",
 									width: 100,
 									click: () => this.closeForm()
 								},
 								{
 									view: "button",
-									value: "Add",
+									value: _("Add"),
 									localId: "btn",
 									type: "form",
 									width: 100,
@@ -208,17 +210,19 @@ export default class FormForContactView extends JetView {
 	}
 
 	addOrEdit() {
+		const _ = this.app.getService("locale")._;
+
 		if (this.form.validate()) {
 			const values = this.form.getValues();
 			values.Photo = this.photo.getValues().Photo;
 			contacts.waitSave(() => {
 				if (values && values.id) {
 					contacts.updateItem(values.id, values);
-					webix.message({type: "success", text: "Contact was updated successfully!"});
+					webix.message({type: "success", text: _("Contact was updated successfully!")});
 				}
 				else {
 					contacts.add(values, 0);
-					webix.message({type: "success", text: "Contact was added successfully!"});
+					webix.message({type: "success", text: _("Contact was added successfully!")});
 				}
 			}).then((res) => {
 				this.closeForm(res.id);
@@ -231,6 +235,8 @@ export default class FormForContactView extends JetView {
 	}
 
 	urlChange() {
+		const _ = this.app.getService("locale")._;
+
 		webix.promise.all([
 			statuses.waitData,
 			contacts.waitData
@@ -241,9 +247,9 @@ export default class FormForContactView extends JetView {
 				if (this.getParam("value") === "edit") {
 					this.form.setValues(item);
 					this.photo.setValues({Photo: item.Photo});
-					this.$$("btn").setValue("Save");
+					this.$$("btn").setValue(_("Save"));
 					this.$$("btn").refresh();
-					this.$$("label").setValue("Edit contact");
+					this.$$("label").setValue(_("Edit contact"));
 				}
 			}
 		});

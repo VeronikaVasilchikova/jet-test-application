@@ -4,6 +4,8 @@ import {contacts} from "../models/contacts";
 
 export default class DatatableFilesView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		return {
 			rows: [
 				{
@@ -15,20 +17,20 @@ export default class DatatableFilesView extends JetView {
 					columns: [
 						{
 							id: "name",
-							header: "Name",
+							header: _("Name"),
 							fillspace: true,
 							sort: "text"
 						},
 						{
 							id: "changeDate",
-							header: "Change Date",
+							header: _("Change Date"),
 							fillspace: true,
 							sort: "date",
 							format: webix.i18n.longDateFormatStr
 						},
 						{
 							id: "sizetext",
-							header: "Size",
+							header: _("Size"),
 							fillspace: true,
 							sort: (a, b) => parseInt(a.sizetext) - parseInt(b.sizetext)
 						},
@@ -41,21 +43,17 @@ export default class DatatableFilesView extends JetView {
 					onClick: {
 						"wxi-trash": (e, id) => {
 							webix.confirm({
-								title: "Remove this note",
-								ok: "Yes",
-								cancel: "No",
-								text: "Are you sure you want to remove this note?"
-							})
-								.then(() => {
-									webix.confirm({
-										title: "Warning!",
-										type: "confirm-warning",
-										text: "You are about to agree. Are you sure?"
-									})
-										.then(() => {
-											fileStorage.remove(id);
-										});
-								});
+								title: _("Remove this note"),
+								ok: _("Yes"),
+								cancel: _("No"),
+								text: _("Are you sure you want to remove this note?")
+							}).then(() => webix.confirm({
+								title: _("Warning!"),
+								type: "confirm-warning",
+								text: _("You are about to agree. Are you sure?")
+							})).then(() => {
+								fileStorage.remove(id);
+							});
 							return false;
 						}
 					}
@@ -67,7 +65,7 @@ export default class DatatableFilesView extends JetView {
 					upload: "",
 					type: "icon",
 					icon: "fas fa-cloud-upload-alt",
-					label: "Upload file",
+					label: _("Upload file"),
 					inputWidth: 300,
 					align: "center",
 					on: {
@@ -85,7 +83,7 @@ export default class DatatableFilesView extends JetView {
 							}
 						},
 						onFileUploadError: () => {
-							webix.alert("Error during file upload");
+							webix.alert(_("Error during file upload"));
 						}
 					}
 				}
